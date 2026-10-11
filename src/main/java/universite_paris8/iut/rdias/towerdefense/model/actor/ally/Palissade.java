@@ -56,4 +56,8 @@ public class Palissade extends Tower {
     public int maxAllowed() {
         return 4;
     }
+
+    protected void onDeath() {
+        deleted();
+    }
 }

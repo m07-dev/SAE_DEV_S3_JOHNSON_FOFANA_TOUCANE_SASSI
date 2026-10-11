@@ -95,25 +95,19 @@ public abstract class Actor {
 
     public boolean isLiving(){return this.hp.getValue() > 0;}
 
+    //Ici plus de Instanceof
     public void die(){
         this.hp.setValue(0);
         try {
-            if (this instanceof Enemy) {
-                if (!((Enemy) this).isOnCatle()) {
-                    env.earn(((Enemy) this).getDeathValue());
-                }
-            }
-            else if (this instanceof Knight) {
-                ((Knight) this).getBase().decrementNbKnight();
-            }
-            else if (this instanceof Palissade) {
-                ((Palissade) this).deleted();
-            }
+            onDeath();
             this.env.addDyingActor(this);
         } catch (Exception ex) {
             System.out.println("  EXCEPTION: " + ex.getMessage());
         }
+    }
 
+
+    protected void onDeath() {
     }
 
     public void takeDamage(int amount) {
