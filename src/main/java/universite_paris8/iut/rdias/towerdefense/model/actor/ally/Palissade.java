@@ -60,4 +60,9 @@ public class Palissade extends Tower {
     protected void onDeath() {
         deleted();
     }
+
+    @Override
+    public boolean isBarrier() {
+        return true;
+    }
 }

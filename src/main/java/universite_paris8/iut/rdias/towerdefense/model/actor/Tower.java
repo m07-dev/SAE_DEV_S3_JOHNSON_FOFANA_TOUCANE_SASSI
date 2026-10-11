@@ -138,4 +138,12 @@ public abstract class Tower extends Actor{
     public IntegerProperty getLevelProperty() {
         return level;
     }
+
+    public boolean isBarrier(){
+        return false;
+    }
+
+    public boolean isTrap(){
+        return false;
+    }
 }

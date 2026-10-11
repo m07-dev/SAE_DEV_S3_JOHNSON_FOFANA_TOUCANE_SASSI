@@ -4,7 +4,6 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Enviro
 import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
-import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,7 @@ public class BatteringRam extends Enemy {
         tick();
         this.target = (Tower) searchTarget();
         if (target != null) {
-            if (target instanceof Palissade){
+            if (target.isBarrier()){
                 ArrayList<int[]> dist = getEnvironnement().getGround().getAllClosestPaths((int)target.getY(), (int)target.getX());
                 int distClosest = getEnvironnement().getGround().getMapBFS().getDistancesMap()[(int)this.getY()][(int)this.getX()][dist.get(0)[0]][dist.get(0)[1]];
                 int[] cible = dist.get(0);
@@ -73,7 +72,7 @@ public class BatteringRam extends Enemy {
         Tower closeTarget = null;
         double minRange = Double.MAX_VALUE;
         for (Tower t : getEnvironnement().getTowers()) {
-            if ((t instanceof Palissade) && t.isLiving()) {
+            if ((t.isBarrier()) && t.isLiving()) {
                 double range = calcDistanceFromTargerUsingPyth(t); // calcul distance via pythagore
                 if (range <= minRange) { //(range <= getRange() && range < minRange) {
                     minRange = range;

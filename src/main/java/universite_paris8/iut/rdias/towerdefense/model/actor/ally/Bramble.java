@@ -77,4 +77,9 @@ public class Bramble extends Tower {
     public boolean canBeUpgraded() {
         return false;
     }
+
+    @Override
+    public boolean isTrap() {
+        return true;
+    }
 }
