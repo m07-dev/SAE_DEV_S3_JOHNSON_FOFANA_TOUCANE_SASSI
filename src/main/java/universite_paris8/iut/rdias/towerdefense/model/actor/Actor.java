@@ -102,7 +102,7 @@ public abstract class Actor {
             onDeath();
             this.env.addDyingActor(this);
         } catch (Exception ex) {
-            System.out.println("  EXCEPTION: " + ex.getMessage());
+            System.out.println("Error during dying actor in Actor");
         }
     }
 

@@ -39,13 +39,13 @@ public abstract class Enemy extends Soldier {
         return closeTarget;
     }
 
-    public boolean isOnCatle() {
+    public boolean isOnCastle() {
         return getEnvironnement().getGround().isCastle((int)this.getY(), (int)this.getX());
     }
 
     @Override
     protected void onDeath() {
-        if (!isOnCatle()) {
+        if (!isOnCastle()) {
             getEnvironnement().earn(deathValue);
         }
     }

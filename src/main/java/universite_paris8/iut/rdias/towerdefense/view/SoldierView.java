@@ -196,7 +196,7 @@ public class SoldierView {
     }
 
     public void blow() {
-        if (this.soldier instanceof Enemy && !((Enemy) this.soldier).isOnCatle()) {
+        if (this.soldier instanceof Enemy && !((Enemy) this.soldier).isOnCastle()) {
             this.image.setImage(imageBurial1);
             FadeTransition fade = new FadeTransition(Duration.seconds(1), image);
             fade.setFromValue(1.0);
