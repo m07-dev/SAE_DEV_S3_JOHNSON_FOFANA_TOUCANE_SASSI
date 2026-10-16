@@ -59,4 +59,8 @@ public class Knight extends Soldier {
     protected void onDeath() {
         base.decrementNbKnight();
     }
+
+    public boolean isknight() {
+        return true;
+    }
 }

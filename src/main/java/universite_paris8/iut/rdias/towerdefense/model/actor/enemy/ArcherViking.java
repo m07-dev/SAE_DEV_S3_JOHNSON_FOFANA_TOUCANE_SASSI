@@ -40,7 +40,7 @@ public class ArcherViking extends Enemy {
         tick();
         this.target = searchTarget();
         if (target != null) {
-            if (target instanceof Knight) {
+            if (target.isknight()) {
                 int dist = calcDistanceFromTargerUsingBFS(target);
                 setxCible((int) target.getX());
                 setyCible((int) target.getY());
@@ -51,7 +51,7 @@ public class ArcherViking extends Enemy {
                     resetCooldown();
                 }
             }
-            else if (target instanceof Tower){
+            else if (target.isTower()){
                 int[] dest = getEnvironnement().getGround().getClosestPath((int)target.getY(), (int)target.getX());
                 double dist = calcDistanceFromTargerUsingPyth(target);
                 setxCible(dest[1]);

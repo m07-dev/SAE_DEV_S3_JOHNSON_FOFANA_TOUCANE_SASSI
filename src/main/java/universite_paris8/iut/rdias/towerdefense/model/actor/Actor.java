@@ -109,6 +109,12 @@ public abstract class Actor {
 
     protected void onDeath() {
     }
+    public boolean isTower() {
+        return false;
+    }
+    public boolean isknight() {
+        return false;
+    }
 
     public void takeDamage(int amount) {
         this.hp.setValue(Math.max(0, this.hp.getValue() - amount));

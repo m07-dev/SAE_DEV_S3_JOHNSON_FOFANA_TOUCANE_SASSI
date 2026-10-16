@@ -146,4 +146,8 @@ public abstract class Tower extends Actor{
     public boolean isTrap(){
         return false;
     }
+
+    public boolean isTower(){
+        return true;
+    }
 }
