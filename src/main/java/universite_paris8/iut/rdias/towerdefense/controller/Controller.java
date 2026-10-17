@@ -89,6 +89,7 @@ public class Controller {
     private ImageView ghostImage;
     private Circle rangeCircle;
     private int towerSelected = 0;
+    private DragTowerView dragTowerView;
 
     //Tower sprites
     private static String pathBegin = "/universite_paris8/iut/rdias/towerdefense/sprite/tower";
@@ -103,6 +104,7 @@ public class Controller {
     public void initialize() {
         ground = new Ground();
         env = new Environnement(ground);
+        dragTowerView = new DragTowerView(actorsArea);
         setupView();
         setupGameOver();
         setupEventHandlers();
@@ -303,24 +305,7 @@ public class Controller {
 
     private void startDrag(Image sprite, int type) {
         towerSelected = type;
-        stopDrag();
-
-        ghostImage = new ImageView(sprite);
-        ghostImage.setFitWidth(32);
-        ghostImage.setFitHeight(32);
-        ghostImage.setOpacity(0.5);
-        ghostImage.setMouseTransparent(true);
-
-        double range = getTowerRange(type);
-
-        rangeCircle = new Circle(range);
-        rangeCircle.setFill(Color.TRANSPARENT);
-        rangeCircle.setStroke(Color.BLACK);
-        rangeCircle.setStrokeWidth(1.5);
-        rangeCircle.setOpacity(0.6);
-        rangeCircle.setMouseTransparent(true);
-
-        actorsArea.getChildren().addAll(rangeCircle, ghostImage);
+        dragTowerView.show(sprite, getTowerRange(type));
         mapGrid.setOnMouseMoved(this::updateDragPosition);
     }
 
@@ -328,24 +313,11 @@ public class Controller {
         Point2D local = mapGrid.sceneToLocal(e.getSceneX(), e.getSceneY());
         int col = (int)(local.getX() / TILE_SIZE);
         int line = (int)(local.getY() / TILE_SIZE);
-        double cx = col * TILE_SIZE + TILE_SIZE / 2;
-        double cy = line * TILE_SIZE + TILE_SIZE / 2;
-
-        ghostImage.setLayoutX(cx - 16);
-        ghostImage.setLayoutY(cy - 16);
-        rangeCircle.setCenterX(cx);
-        rangeCircle.setCenterY(cy);
+        dragTowerView.moveTo(col, line);
     }
 
     private void stopDrag() {
-        if (ghostImage != null) {
-            actorsArea.getChildren().remove(ghostImage);
-            ghostImage = null;
-        }
-        if (rangeCircle != null) {
-            actorsArea.getChildren().remove(rangeCircle);
-            rangeCircle = null;
-        }
+        dragTowerView.hide();
         mapGrid.setOnMouseMoved(null);
     }
 
