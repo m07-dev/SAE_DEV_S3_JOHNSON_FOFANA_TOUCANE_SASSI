@@ -90,6 +90,7 @@ public class Controller {
     private Circle rangeCircle;
     private int towerSelected = 0;
     private DragTowerView dragTowerView;
+    private GameOverView gameOverView;
 
     //Tower sprites
     private static String pathBegin = "/universite_paris8/iut/rdias/towerdefense/sprite/tower";
@@ -105,6 +106,7 @@ public class Controller {
         ground = new Ground();
         env = new Environnement(ground);
         dragTowerView = new DragTowerView(actorsArea);
+        gameOverView = new GameOverView(actorsArea);
         setupView();
         setupGameOver();
         setupEventHandlers();
@@ -344,40 +346,10 @@ public class Controller {
     // Game Over
     private void showGameOver() {
         int wave = env.getWaveIndexProperty().get();
-        String message = getGameOverMessage(wave);
-
-        VBox gameOverPane = new VBox(20);
-        gameOverPane.setAlignment(javafx.geometry.Pos.CENTER);
-        gameOverPane.setStyle("-fx-background-color: rgba(0,0,0,0.7);");
-        gameOverPane.prefWidthProperty().bind(actorsArea.widthProperty());
-        gameOverPane.prefHeightProperty().bind(actorsArea.heightProperty());
-
-        Label gameOverLabel = new Label("GAME OVER");
-        gameOverLabel.getStyleClass().add("gameOver");
-
-        Label waveReached = new Label("Vague atteinte : " + wave);
-        waveReached.getStyleClass().add("gameOverWave");
-
-        Label messageLabel = new Label(message);
-        messageLabel.getStyleClass().add("gameOverMessage");
-
-        gameOverPane.getChildren().addAll(gameOverLabel, waveReached, messageLabel);
-        actorsArea.getChildren().add(gameOverPane);
+        gameOverView.show(wave);
     }
 
-    private String getGameOverMessage(int wave) {
-        if (wave <= 2) {
-            return "Tu fais honte au roi. Au bûcher !!!";
-        } else if (wave <= 5) {
-            return "Pff. T'es mauvais ! ";
-        } else if (wave <= 10) {
-            return "Mmmmh. Va lire l'art de la Guerre pour t'améliorer.";
-        } else if (wave <= 15) {
-            return "Bien ! Mais tu dois améliorer ta tactique.";
-        } else {
-            return "Tu as été promu en tant que tacticien de l'armée du Roi. Chapeau l'artiste.";
-        }
-    }
+
 
     public int getTemps() {
         return temps;
