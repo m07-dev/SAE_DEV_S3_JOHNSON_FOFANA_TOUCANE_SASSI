@@ -41,7 +41,7 @@ public class Knight extends Soldier {
             setyCible((int) target.getY());
         }
         this.move();
-        if (target != null && calcDistanceFromTargerUsingBFS(target) < this.getRange() && canAct()) {
+        if (target != null && calcDistanceFromTargetUsingBFS(target) < this.getRange() && canAct()) {
             target.takeDamage(this.getDmg());
             resetCooldown();
         }
@@ -60,7 +60,5 @@ public class Knight extends Soldier {
         base.decrementNbKnight();
     }
 
-    public boolean isknight() {
-        return true;
-    }
+
 }

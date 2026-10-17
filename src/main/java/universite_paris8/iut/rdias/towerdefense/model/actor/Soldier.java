@@ -96,7 +96,7 @@ public abstract class Soldier extends Actor{
     public void wayChangement() {
         int[][][][] mapBfs = getEnvironnement().getGround().getMapBFS().getDistancesMap();
         int[][] dirs = {{-1,0},{0,1},{1,0},{0,-1}};
-        int shortestDist = -1;
+        double shortestDist = -1;
         int[] bestNeighbor = new int[2];
         for (int[] d : dirs) {
             int nL = (int)getY() + d[0];
@@ -108,7 +108,7 @@ public abstract class Soldier extends Actor{
             if (!getEnvironnement().getGround().isPath(nL, nC) && !getEnvironnement().getGround().isCastle(nL, nC)) {
                 continue;
             }
-            int dCible = mapBfs[yCible][xCible][nL][nC];
+            double dCible = mapBfs[yCible][xCible][nL][nC];
             if (shortestDist == -1 || (dCible >= 0 && dCible <= shortestDist)) {
                 if (dCible == shortestDist) {
                     int r = (int) (Math.random()*2);
@@ -136,7 +136,7 @@ public abstract class Soldier extends Actor{
         double minRange = Double.MAX_VALUE;
         for (Enemy e : getEnvironnement().getEnemies()) {
             if (e.isLiving()) {
-                int range = calcDistanceFromTargerUsingBFS(e);
+                int range = calcDistanceFromTargetUsingBFS(e);
                 if (range<= minRange) {
                     minRange = range;
                     closeTarget = e;
@@ -188,5 +188,15 @@ public abstract class Soldier extends Actor{
     }
     public void resetCooldown() {
         this.cooldown = 0;
+    }
+
+    @Override
+    public int[] getApproachCell() {
+        return new int[]{(int) getX(), (int) getY()};
+    }
+
+    @Override
+    public boolean isInReachOf(Actor attacker) {
+        return attacker.calcDistanceFromTargetUsingBFS(this) < attacker.getRange();
     }
 }

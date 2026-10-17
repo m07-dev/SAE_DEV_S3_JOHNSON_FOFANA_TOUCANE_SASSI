@@ -147,7 +147,14 @@ public abstract class Tower extends Actor{
         return false;
     }
 
-    public boolean isTower(){
-        return true;
+    @Override
+    public int[] getApproachCell() {
+        int[] closestPath = getEnvironnement().getGround().getClosestPath((int) getY(), (int) getX());
+        return new int[]{closestPath[1], closestPath[0]};
+    }
+
+    @Override
+    public boolean isInReachOf(Actor attacker) {
+        return attacker.calcDistanceFromTargerUsingPyth(this) < Math.pow(attacker.getRange(), 2);
     }
 }

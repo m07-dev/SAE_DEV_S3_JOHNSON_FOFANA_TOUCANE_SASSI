@@ -6,8 +6,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
-import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
 
 /*La super classe abstraite Actor définit le comportement commun
  * à toutes les entités du jeu (ennemis, tours, etc.).
@@ -45,7 +43,7 @@ public abstract class Actor {
 
     public abstract void act();
     public abstract Actor searchTarget();
-    public int calcDistanceFromTargerUsingBFS(Actor a) {
+    public int calcDistanceFromTargetUsingBFS(Actor a) {
         return getEnvironnement().getGround().getMapBFS().getDistancesMap()[(int)this.getY()][(int)this.getX()][(int)a.getY()][(int)a.getX()];
     }
     public double calcDistanceFromTargerUsingPyth(Actor a) {
@@ -109,12 +107,6 @@ public abstract class Actor {
 
     protected void onDeath() {
     }
-    public boolean isTower() {
-        return false;
-    }
-    public boolean isknight() {
-        return false;
-    }
 
     public void takeDamage(int amount) {
         this.hp.setValue(Math.max(0, this.hp.getValue() - amount));
@@ -123,7 +115,10 @@ public abstract class Actor {
         }
     }
 
+    // Case (x, y) vers laquelle un attaquant doit se rendre pour atteindre cet acteur
+    public abstract int[] getApproachCell();
 
+    public abstract boolean isInReachOf(Actor attacker);
 
     public void setHp(int hp){
         this.hp.setValue(hp);
