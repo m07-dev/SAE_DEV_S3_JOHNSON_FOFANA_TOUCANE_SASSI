@@ -65,4 +65,9 @@ public class Palissade extends Tower {
     public boolean isBarrier() {
         return true;
     }
+
+    @Override
+    protected void onRemoved() {
+        this.deleted();
+    }
 }

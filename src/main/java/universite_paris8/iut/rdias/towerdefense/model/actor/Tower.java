@@ -92,13 +92,19 @@ public abstract class Tower extends Actor{
         this.level.set(this.level.get() + 1);
     }
 
+    public int getSellPrice() {
+        return this.cost / 2;
+    }
+
     public void sell(){
-        int refund = this.cost / 2;
-        if (this instanceof Palissade) {
-            ((Palissade) this).deleted();
-        }
+        int refund = getSellPrice();
+        this.onRemoved();
         getEnvironnement().earn(refund);
         getEnvironnement().delTower(this);
+    }
+
+    protected void onRemoved() {
+        // par default, one fait rien
     }
     public boolean canBePlaced(int line, int col) {
         var ground = getEnvironnement().getGround();
