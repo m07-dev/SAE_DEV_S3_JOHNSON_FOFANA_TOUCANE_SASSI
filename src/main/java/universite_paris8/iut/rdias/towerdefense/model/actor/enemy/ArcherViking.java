@@ -40,39 +40,29 @@ public class ArcherViking extends Enemy {
         tick();
         this.target = searchTarget();
         if (target != null) {
-            if (target.isknight()) {
-                int dist = calcDistanceFromTargerUsingBFS(target);
-                setxCible((int) target.getX());
-                setyCible((int) target.getY());
-                this.move();
-                if (dist < this.getRange() && canAct()){
-                    Projectile p = new Projectile(getEnvironnement(), getX(), getY(), this.getDmg(), target);
-                    getEnvironnement().addEffect(p);
-                    resetCooldown();
-                }
-            }
-            else if (target.isTower()){
-                int[] dest = getEnvironnement().getGround().getClosestPath((int)target.getY(), (int)target.getX());
-                double dist = calcDistanceFromTargerUsingPyth(target);
-                setxCible(dest[1]);
-                setyCible(dest[0]);
-                this.move();
-                if (dist < Math.pow((this.getRange()), 2)){
-                    if (canAct()) {
-                        Projectile p = new Projectile(getEnvironnement(), getX(), getY(), this.getDmg(), target);
-                        getEnvironnement().addEffect(p);
-                        resetCooldown();
-                    }
-                }
-            }
+            chase(target);
         } else {
-            setxCible(40);
-            setyCible(42);
-            this.move();
+            headToCastle();
         }
-        if (getEnvironnement().getGround().isCastle((int)this.getY(), (int)this.getX())) {
-            getEnvironnement().getCastle().takeDamage(this.getDmg());
-            this.die();
+        attackCastleIfReached();
+    }
+
+    private void chase(Actor target) {
+        boolean inRange = target.isInReachOf(this);
+        int[] cell = target.getApproachCell();
+        setxCible(cell[0]);
+        setyCible(cell[1]);
+        this.move();
+        if (inRange) {
+            shootAt(target);
+        }
+    }
+
+    private void shootAt(Actor target) {
+        if (canAct()) {
+            Projectile p = new Projectile(getEnvironnement(), getX(), getY(), this.getDmg(), target);
+            getEnvironnement().addEffect(p);
+            resetCooldown();
         }
     }
 
@@ -90,7 +80,7 @@ public class ArcherViking extends Enemy {
         }
         for (Knight k : getEnvironnement().getKnights()) {
             if (k.isLiving()) {
-                int range = calcDistanceFromTargerUsingBFS(k); // calcul distance via pythagore
+                int range = calcDistanceFromTargetUsingBFS(k); // calcul distance via pythagore
                 if (range<= minRange) {//(range <= getRange() && range < minRange) {
                     minRange = range;
                     closeTarget = k;

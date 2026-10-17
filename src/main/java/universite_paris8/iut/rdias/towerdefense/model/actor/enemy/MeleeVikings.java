@@ -31,14 +31,9 @@ public abstract class MeleeVikings extends Enemy {
                 resetCooldown();
             }
         } else {
-            setxCible(42);
-            setyCible(40);
-            this.move();
+            headToCastle();
         }
-        if (getEnvironnement().getGround().isCastle((int)this.getY(), (int)this.getX())) {
-            getEnvironnement().getCastle().takeDamage(this.getDmg());
-            this.die();
-        }
+        attackCastleIfReached();
     }
 
     public void searchtarget() {

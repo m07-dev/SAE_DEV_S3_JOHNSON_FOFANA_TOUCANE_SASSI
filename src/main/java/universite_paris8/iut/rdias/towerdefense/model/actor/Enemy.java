@@ -29,7 +29,7 @@ public abstract class Enemy extends Soldier {
         double minRange = 6.0;
         for (Knight k : getEnvironnement().getKnights()) {
             if (k.isLiving()) {
-                int range = calcDistanceFromTargerUsingBFS(k);
+                int range = calcDistanceFromTargetUsingBFS(k);
                 if (range<= minRange) {
                     minRange = range;
                     closeTarget = k;
@@ -47,6 +47,19 @@ public abstract class Enemy extends Soldier {
     protected void onDeath() {
         if (!isOnCastle()) {
             getEnvironnement().earn(deathValue);
+        }
+    }
+
+    protected void headToCastle() {
+        setxCible(42);
+        setyCible(40);
+        this.move();
+    }
+
+    protected void attackCastleIfReached() {
+        if (isOnCastle()) {
+            getEnvironnement().getCastle().takeDamage(getDmg());
+            die();
         }
     }
 }
