@@ -40,14 +40,14 @@ public class ArcherViking extends Enemy {
         tick();
         this.target = searchTarget();
         if (target != null) {
-            chase(target);
+            chaseActor(target);
         } else {
             headToCastle();
         }
         attackCastleIfReached();
     }
 
-    private void chase(Actor target) {
+    private void chaseActor(Actor target) {
         boolean inRange = target.isInReachOf(this);
         int[] cell = target.getApproachCell();
         setxCible(cell[0]);

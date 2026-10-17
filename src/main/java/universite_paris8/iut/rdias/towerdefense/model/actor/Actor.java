@@ -115,7 +115,7 @@ public abstract class Actor {
         }
     }
 
-    // Case (x, y) vers laquelle un attaquant doit se rendre pour atteindre cet acteur
+    // Case (x, y) vers laquelle un attaquant doit se rendre pour atteindre sa cible
     public abstract int[] getApproachCell();
 
     public abstract boolean isInReachOf(Actor attacker);

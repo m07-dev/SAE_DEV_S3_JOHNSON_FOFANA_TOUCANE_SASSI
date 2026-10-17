@@ -98,7 +98,7 @@ public class Wave {
         int radomSelectEnemy = (int) (Math.random() * 100);
 
         if (waveIndex <= 1) {
-            e = new Viking(env, env.getNextId(), col, line);
+            e = new ArcherViking(env, env.getNextId(), col, line);
         }
         else if (waveIndex <= 3) {
             if (radomSelectEnemy < 30) {
