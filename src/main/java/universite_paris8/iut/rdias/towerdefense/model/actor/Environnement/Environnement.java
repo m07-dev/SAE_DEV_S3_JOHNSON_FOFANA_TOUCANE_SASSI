@@ -214,6 +214,14 @@ public class Environnement {
         }
         return null;
     }
+    public int getTowerRange(int towerType){
+        return switch (towerType){
+            case 1 -> settings.getArcherRange();
+            case 5 -> settings.getSorcererRange();
+            case 6 -> settings.getBallistaRange();
+            default -> 0;
+        };
+    }
 
     public IntegerProperty getWaveIndexProperty() {
         return waveIndex;

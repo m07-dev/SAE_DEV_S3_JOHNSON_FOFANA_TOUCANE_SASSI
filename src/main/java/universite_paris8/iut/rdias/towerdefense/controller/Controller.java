@@ -311,7 +311,7 @@ public class Controller {
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
 
-        double range = getTowerRange(type);
+        double range = env.getTowerRange(type) * TILE_SIZE;
 
         rangeCircle = new Circle(range);
         rangeCircle.setFill(Color.TRANSPARENT);
@@ -349,7 +349,7 @@ public class Controller {
         mapGrid.setOnMouseMoved(null);
     }
 
-    private double getTowerRange(int towerType) {
+    /*private double getTowerRange(int towerType) {
         switch (towerType) {
             case TOWER_ARCHER -> {
                 return env.getSettings().getArcherRange() * TILE_SIZE;
@@ -362,7 +362,7 @@ public class Controller {
             }
         }
         return 0;
-    }
+    }*/
 
     // Tower Placement
     private void addTower(int towerType, int col, int line) {
