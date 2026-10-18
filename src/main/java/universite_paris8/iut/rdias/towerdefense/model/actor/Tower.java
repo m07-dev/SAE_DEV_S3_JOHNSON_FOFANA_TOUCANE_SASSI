@@ -102,9 +102,7 @@ public abstract class Tower extends Actor{
     }
     public boolean canBePlaced(int line, int col) {
         var ground = getEnvironnement().getGround();
-        if (line < 0 || line >= ground.heigth() || col < 0 || col >= ground.width()) {
-            return false;
-        }
+        if (!ground.isInside(line, col)) { return false; }
         if (!ground.isGrass(line, col)) {
             return false;
         }
@@ -119,9 +117,7 @@ public abstract class Tower extends Actor{
             for (int step = 1; step <= range; step++) {
                 int nL = line + d[0] * step;
                 int nC = col + d[1] * step;
-                if (nL >= 0 && nL < ground.heigth() && nC >= 0 && nC < ground.width()) {
-                    if (ground.isPath(nL, nC)) return true;
-                }
+                if (ground.isInside(nL, nC)) { if (ground.isPath(nL, nC)) return true; }
             }
         }
         return false;

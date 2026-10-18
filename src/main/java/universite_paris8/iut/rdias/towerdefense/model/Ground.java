@@ -82,7 +82,9 @@ public class Ground {
     public int heigth () {
         return this.map.length;
     }
-
+    public boolean isInside(int line, int col) {
+        return line >= 0 && line < heigth() && col >= 0 && col < width();
+    }
     public int width() {return this.map[0].length;}
 
     public int idTuile(int ligne, int col) {

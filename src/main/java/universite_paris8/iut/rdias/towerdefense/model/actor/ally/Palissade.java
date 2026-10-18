@@ -35,7 +35,7 @@ public class Palissade extends Tower {
         boolean result = false;
         Ground ground = getEnvironnement().getGround();
 
-        if (line >= 0 && line < ground.heigth() && col >= 0 && col < ground.width() && ground.isPath(line, col)) {
+        if (ground.isInside(line, col) && ground.isPath(line, col)) {
             result = true;
         }
         return result;

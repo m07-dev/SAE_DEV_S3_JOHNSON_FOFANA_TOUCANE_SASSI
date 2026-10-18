@@ -238,7 +238,7 @@ public class Controller {
         int col = (int)(local.getX() / TILE_SIZE);
         int line = (int)(local.getY() / TILE_SIZE);
 
-        if (!isValidTile(line, col)) {
+        if (!ground.isInside(line, col)) {
             return;
         }
 
@@ -295,9 +295,9 @@ public class Controller {
         towerActionMenu.setVisible(true);
     }
 
-    private boolean isValidTile(int line, int col) {
+    /*private boolean isValidTile(int line, int col) {
         return !(line < 0 || line >= ground.heigth() || col < 0 || col >= ground.width());
-    }
+    }*/
 
     // Drag And Drop
 
