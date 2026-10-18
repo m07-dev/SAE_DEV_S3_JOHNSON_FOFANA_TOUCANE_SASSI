@@ -206,6 +206,15 @@ public class Environnement {
         addAnimation(nAnimation);
     }
 
+    public Tower getTowerAt(int col, int line){
+        for(Tower t : towers){
+            if((int)t.getX() == col && (int)t.getY() == line){
+                return t;
+            }
+        }
+        return null;
+    }
+
     public IntegerProperty getWaveIndexProperty() {
         return waveIndex;
     }

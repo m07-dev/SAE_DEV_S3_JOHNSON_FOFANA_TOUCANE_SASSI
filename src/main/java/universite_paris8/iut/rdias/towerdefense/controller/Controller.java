@@ -247,7 +247,7 @@ public class Controller {
         }
 
         // Check if clicking on existing tower
-        Tower tower = findTowerAt(col, line);
+        Tower tower = env.getTowerAt(col, line);
         if (tower != null) {
             stopDrag();
             showTowerMenu(tower);
@@ -262,14 +262,14 @@ public class Controller {
         }
     }
 
-    private Tower findTowerAt(int col, int line) {
+    /*private Tower findTowerAt(int col, int line) {
         for (Tower t : env.getTowers()) {
             if ((int)t.getX() == col && (int)t.getY() == line) {
                 return t;
             }
         }
         return null;
-    }
+    }*/
 
     private void showTowerMenu(Tower tower) {
         btnSell.setText("Sell (" + tower.getCost() / 2 + " 💰)");
