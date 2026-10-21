@@ -1,0 +1,86 @@
+package universite_paris8.iut.rdias.towerdefense.model.actor.enemy;
+
+import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
+
+import java.util.ArrayList;
+
+/*La sous-classe BatteringRam qui hérite de Enemy.
+ * Cet ennemi attaque au corps à corps et cible
+ * uniquement les Palissade. Il est le seul ennemi
+ * capable de détruire les palissades. Sa portée
+ * d'attaque est de 0.5. Il utilise le BFS pour
+ * trouver le chemin le plus proche vers sa cible.
+ * Un ramwarrior a comme attribut spécifique:
+ * -sa cible (target) qu'il doit attaquer
+ */
+
+public class BatteringRam extends Enemy {
+    private Tower target;
+
+    public BatteringRam(Environnement rEnv, int eId, double eX, double eY) {
+        super(  rEnv,
+                rEnv.getSettings().getBatteringRamHp(),
+                rEnv.getSettings().getBatteringRamDmg(),
+                eId,
+                0.5,
+                eX,
+                eY,
+                rEnv.getSettings().getBatteringRamSpeed(),
+                rEnv.getSettings().getBatteringRamDeathValue(),
+                rEnv.getSettings().getBatteringRamSpeedAct()
+        );
+    }
+
+    @Override
+    public void act(){
+        tick();
+        this.target = (Tower) searchTarget();
+        if (target != null) {
+            if (target instanceof Palissade){
+                ArrayList<int[]> dist = getEnvironnement().getGround().getAllClosestPaths((int)target.getY(), (int)target.getX());
+                int distClosest = getEnvironnement().getGround().getMapBFS().getDistancesMap()[(int)this.getY()][(int)this.getX()][dist.get(0)[0]][dist.get(0)[1]];
+                int[] cible = dist.get(0);
+                for (int[] pE : dist) {
+                    if (distClosest >= getEnvironnement().getGround().getMapBFS().getDistancesMap()[(int)this.getY()][(int)this.getX()][pE[0]][pE[1]]) {
+                        cible = pE;
+                        distClosest = getEnvironnement().getGround().getMapBFS().getDistancesMap()[(int)this.getY()][(int)this.getX()][pE[0]][pE[1]];
+                    }
+                }
+                setxCible(cible[1]);
+                setyCible(cible[0]);
+                this.move();
+                if (distClosest < this.getRange() && canAct()) {
+                    target.takeDamage(this.getDmg());
+                    resetCooldown();
+                }
+            }
+        } else {
+            setxCible(42);
+            setyCible(40);
+            this.move();
+        }
+        if (getEnvironnement().getGround().isCastle((int)this.getY(), (int)this.getX())) {
+            getEnvironnement().getCastle().takeDamage(this.getDmg());
+            this.die();
+        }
+    }
+
+    public Actor searchTarget() {
+        Tower closeTarget = null;
+        double minRange = Double.MAX_VALUE;
+        for (Tower t : getEnvironnement().getTowers()) {
+            if ((t instanceof Palissade) && t.isLiving()) {
+                double range = calcDistanceFromTargerUsingPyth(t); // calcul distance via pythagore
+                if (range <= minRange) { //(range <= getRange() && range < minRange) {
+                    minRange = range;
+                    closeTarget = t;
+                }
+            }
+        }
+        return closeTarget;
+    }
+}

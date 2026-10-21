@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="670.0" prefWidth="929.0" stylesheets="@StaticDisplay.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="universite_paris8.iut.rdias.towerdefense.controller.Controller">
+   <center>
+      <StackPane styleClass="planchenue">
+         <TilePane fx:id="mapGrid" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER" />
+         <Pane fx:id="actorsArea" mouseTransparent="true" pickOnBounds="false" />
+      </StackPane>
+   </center>
+   <right>
+      <VBox prefHeight="643.0" prefWidth="420.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="101.0" prefWidth="300.0" styleClass="planchenue">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="22.0" prefWidth="165.0" styleClass="encadre">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" styleClass="textLabel" text="PV du joueur" textAlignment="CENTER" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets bottom="2.0" left="10.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                        <StackPane HBox.hgrow="ALWAYS">
+                           <children>
+                              <ProgressBar fx:id="hpBar" maxWidth="Infinity" prefHeight="20" progress="1.0" styleClass="castle-hp-bar">
+                                 <StackPane.margin>
+                                    <Insets top="5.0" />
+                                 </StackPane.margin></ProgressBar>
+                              <Label fx:id="hpPlayer" styleClass="hp-text-overlay" text="500">
+                                 <StackPane.margin>
+                                    <Insets top="5.0" />
+                                 </StackPane.margin></Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets bottom="3.0" left="20.0" right="10.0" top="3.0" />
+                           </HBox.margin>
+                        </StackPane>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="3.0" right="3.0" top="10.0" />
+                     </VBox.margin>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+                  <HBox prefHeight="22.0" prefWidth="165.0" styleClass="encadre">
+                     <children>
+                        <Label graphicTextGap="5.0" styleClass="textLabel" text="Ecu" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets bottom="2.0" left="10.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="balanceLabel" styleClass="textLabel" text="nb ecu" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets bottom="2.0" left="180.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="3.0" right="3.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="22.0" prefWidth="100.0"  styleClass="encadre">
+                     <children>
+                        <Label styleClass="textLabel" text="Vague" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets bottom="2.0" left="10.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="waveLabel" styleClass="textLabel" text="0" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets bottom="2.0" left="180.0" top="2.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="3.0" right="3.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="530.0" prefWidth="300.0" styleClass="rightPane">
+               <children>
+                  <HBox prefHeight="292.0" prefWidth="420.0">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="360.0" prefWidth="95.0">
+                           <children>
+                              <VBox alignment="CENTER" spacing="3">
+                                 <children>
+                                    <Button fx:id="archerTower" alignment="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" textAlignment="CENTER">
+                                       <styleClass>
+                                          <String fx:value="button1" />
+                                       </styleClass>
+                                       <tooltip>
+                                          <Tooltip showDelay="200ms" styleClass="tower-tooltip" text="Archer&#10;Tire sur 1 ennemi à distance" />
+                                       </tooltip>
+                                    </Button>
+                                    <Label fx:id="costLabelArcher" styleClass="cost-label" text="Coûts : 100" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" spacing="3">
+                                 <children>
+                                    <Button fx:id="barrackTower" alignment="CENTER" layoutX="24.0" layoutY="99.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" styleClass="button2" textAlignment="CENTER">
+                                       <tooltip>
+                                          <Tooltip showDelay="200ms" styleClass="tower-tooltip" text="Caserne&#10;Invoque des chevaliers" />
+                                       </tooltip>
+                                    </Button>
+                                    <Label fx:id="costLabelBarrack" styleClass="cost-label" text="Coûts : 200" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER" spacing="3">
+                                 <children>
+                                    <Button fx:id="brambleTower" alignment="CENTER" layoutX="24.0" layoutY="67.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" styleClass="button3" textAlignment="CENTER">
+                                       <tooltip>
+                                          <Tooltip showDelay="200ms" styleClass="tower-tooltip" text="Ronce&#10;Ralentit les ennemis&#10;Sur chemin uniquement" />
+                                       </tooltip>
+                                    </Button>
+                                    <Label fx:id="costLabelBramble" styleClass="cost-label" text="Coûts : 50" />
+                                 </children>
+                              </VBox>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="80.0" top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="360.0" prefWidth="90.0">
+                           <children>
+                              <VBox alignment="CENTER" spacing="3">
+                                 <children>
+                                    <Button fx:id="palissadeTower" alignment="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" styleClass="button4" textAlignment="CENTER">
+                                       <tooltip>
+                                          <Tooltip showDelay="200ms" styleClass="tower-tooltip" text="Palissade&#10;Bloque un chemin&#10;Sur chemin uniquement" />
+                                       </tooltip>
+                                    </Button>
+                                    <Label fx:id="costLabelPalissade" styleClass="cost-label" text="Coûts : 300" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" spacing="3">
+                                 <children>
+                                    <Button fx:id="sorcererTower" alignment="CENTER" layoutX="24.0" layoutY="99.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" styleClass="button5" textAlignment="CENTER">
+                                       <tooltip>
+                                          <Tooltip showDelay="200ms" styleClass="tower-tooltip" text="Tour de sorcier&#10;Dégâts de zone sur la durée" />
+                                       </tooltip>
+                                    </Button>
+                                    <Label fx:id="costLabelSorcerer" styleClass="cost-label" text="Coûts : 500" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER" spacing="3">
+                                 <children>
+                                    <Button fx:id="ballistaTower" alignment="CENTER" layoutX="24.0" layoutY="67.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" styleClass="button6" textAlignment="CENTER">
+                                       <tooltip>
+                                          <Tooltip showDelay="200ms" styleClass="tower-tooltip" text="Baliste&#10;Tire sur 2 ennemis à distance" />
+                                       </tooltip>
+                                    </Button>
+                                    <Label fx:id="costLabelBallista" styleClass="cost-label" />
+                                 </children>
+                              </VBox>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="67.0" top="5.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="towerActionMenu" prefHeight="60.0" prefWidth="300.0" visible="false" spacing="20" alignment="CENTER">
+                     <children>
+                        <Button fx:id="btnSell" mnemonicParsing="false" styleClass="action-button">
+                           <HBox.margin><Insets top="10.0" bottom="10.0"/></HBox.margin>
+                        </Button>
+                        <Button fx:id="btnUpgrade" mnemonicParsing="false" styleClass="action-button">
+                           <HBox.margin><Insets top="10.0" bottom="10.0"/></HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin><Insets top="10.0" left="3.0" right="3.0" bottom="10.0"/></VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </children></VBox>
+   </right>
+   <top>
+      <StackPane prefHeight="126.0" prefWidth="929.0" styleClass="TopPaneBackground" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="161.0" prefWidth="929.0" styleClass="labelHeaderBackground" text="Vikings VS Knights" />
+         </children>
+      </StackPane>
+   </top>
+</BorderPane>

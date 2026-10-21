@@ -1,0 +1,247 @@
+package universite_paris8.iut.rdias.towerdefense.view;
+
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
+import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Soldier;
+import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.*;
+
+/*
+ * Gère l'affichage et l'animation des soldats (ennemis et alliés).
+ *
+ * Affiche différents types de soldats (Viking, Knight, Archer, Berserker, etc.) avec leurs animations respectives. Gère aussi la barre de vie,
+ * l'effet de dégâts (flash rouge) et l'animation de mort avec fondu progressif.
+ */
+
+public class SoldierView {
+
+    private Soldier soldier;
+    private Pane paneViewContainer;
+    private ImageView image;
+    private Rectangle pvBar;
+
+    private static String pathBegin = "/universite_paris8/iut/rdias/towerdefense/sprite";
+
+    private static Image imageViking1 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_viking/tile_vikingSoldier1.png"));
+    private static Image imageViking2 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_viking/tile_vikingSoldier2.png"));
+
+    private static Image imageknight1 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/knight/tile_knight1.png"));
+    private static Image imageKnight2 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/knight/tile_knight2.png"));
+
+    private static Image imageArcherViking1 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_archerer/tile_vikingarcherer1.png"));
+    private static Image imageArcherViking2 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_archerer/tile_vikingarcherer2.png"));
+
+    private static Image imageBerserker1 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_berserker/tile_vikingberserker1.png"));
+    private static Image imageBerserker2 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_berserker/tile_vikingberserker2.png"));
+
+    private static Image imageShiedlViking1 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_bouclier/tile_bouclierSoldier1.png"));
+    private static Image imageShiedlViking2 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/vikings_bouclier/tile_bouclierSoldier2.png"));
+
+    private static Image imageBatteringRam1 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/battering_ram/sprite_BatteringRam1.png"));
+    private static Image imageBatteringRam2 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/battering_ram/sprite_BatteringRam2.png"));
+
+    private static Image imageSlash = new Image(GroundView.class.getResourceAsStream(pathBegin + "/projectile/sprite_slash.png"));
+
+    private static Image imageBurial1 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/tombstone/sprite_tombstone1.png"));
+    private static Image imageBurial2 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/tombstone/sprite_tombstone2.png"));
+    private static Image imageBurial3 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/tombstone/sprite_tombstone3.png"));
+    private static Image imageBurial4 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/tombstone/sprite_tombstone4.png"));
+
+    public SoldierView(Soldier sSoldier) {
+        this.soldier = sSoldier;
+        this.paneViewContainer = new Pane();
+        this.pvBar = new Rectangle();
+        pvBar.setHeight(2);
+        pvBar.setFill(Color.RED);
+        int imageSize = 25;
+
+        if (soldier instanceof Viking) {
+            this.image = new ImageView(imageViking1);
+            this.paneViewContainer.setId("v" + soldier.getId());
+        }
+        else if (soldier instanceof Knight) {
+            pvBar.setFill(Color.BLUE);
+            imageSize = 29;
+            this.image = new ImageView(imageknight1);
+            this.paneViewContainer.setId("k" + soldier.getId());
+        }
+        else if (soldier instanceof ArcherViking) {
+            this.image = new ImageView(imageArcherViking1);
+            this.paneViewContainer.setId("v" + soldier.getId());
+        }
+        else if (soldier instanceof Berserker) {
+            this.image = new ImageView(imageBerserker1);
+            this.paneViewContainer.setId("v" + soldier.getId());
+        }
+        else if (soldier instanceof BatteringRam) {
+            this.image = new ImageView(imageBatteringRam1);
+            this.paneViewContainer.setId("v" + soldier.getId());
+        }
+        else if (soldier instanceof ShieldViking) {
+            this.image = new ImageView(imageShiedlViking1);
+            this.paneViewContainer.setId("v" + soldier.getId());
+        }
+        this.soldier.getHpProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue.intValue() > newValue.intValue()) {
+                ColorInput rouge = new ColorInput(
+                        0, 0,
+                        this.image.getImage().getWidth(),
+                        this.image.getImage().getHeight(),
+                        Color.RED
+                );
+                Blend flashRouge = new Blend(BlendMode.SRC_ATOP, null, rouge);
+                flashRouge.setOpacity(0.5);
+                this.image.setEffect(flashRouge);
+
+                ImageView nIV = new ImageView(imageSlash);
+                this.paneViewContainer.getChildren().add(nIV);
+                nIV.layoutXProperty().bind(this.image.layoutXProperty());
+                nIV.layoutYProperty().bind(this.image.layoutYProperty());
+
+                PauseTransition pause = new PauseTransition(Duration.millis(150));
+                pause.setOnFinished(event -> {
+                    this.image.setEffect(null);
+                    this.paneViewContainer.getChildren().remove(nIV);
+                });
+                pause.play();
+            }
+        });
+        pvBar.widthProperty().bind(sSoldier.getHpProperty().multiply(0.4));
+        image.setFitWidth(imageSize);
+        image.setFitHeight(imageSize);
+        this.image.layoutXProperty().bind(this.soldier.getXProperty().multiply(16).add(-16/2));
+        this.image.layoutYProperty().bind(this.soldier.getYProperty().multiply(16).add(-16/2));
+        pvBar.layoutXProperty().bind(image.layoutXProperty().add(imageSize/2).add(sSoldier.getHpProperty().multiply(0.4).multiply(-0.5)));
+        pvBar.layoutYProperty().bind(image.layoutYProperty());
+
+        this.paneViewContainer.getChildren().add(this.image);
+        this.paneViewContainer.getChildren().add(this.pvBar);
+    }
+
+    public ImageView getImage() {
+        return this.image;
+    }
+    public Rectangle getPvBar() {
+        return this.pvBar;
+    }
+
+    public void switchImage() {
+        if (this.soldier.isLiving()) {
+            if (this.getSoldier() instanceof Viking) {
+                if (image.getImage().equals(imageViking1)) {
+                    image.setImage(imageViking2);
+                } else {
+                    image.setImage(imageViking1);
+                }
+            }
+            else if (this.getSoldier() instanceof ArcherViking) {
+                if (image.getImage().equals(imageArcherViking1)) {
+                    image.setImage(imageArcherViking2);
+                } else {
+                    image.setImage(imageArcherViking1);
+                }
+            }
+            else if (soldier instanceof Knight){
+                if (image.getImage().equals(imageknight1)) {
+                    image.setImage(imageKnight2);
+                } else {
+                    image.setImage(imageknight1);
+                }
+            }
+            else if (soldier instanceof Berserker) {
+                if (image.getImage().equals(imageBerserker1)) {
+                    image.setImage(imageBerserker2);
+                }
+                else {
+                    image.setImage(imageBerserker1);
+                }
+            }
+            else if (soldier instanceof BatteringRam) {
+                if (image.getImage().equals(imageBatteringRam1)) {
+                    image.setImage(imageBatteringRam2);
+                }
+                else {
+                    image.setImage(imageBatteringRam1);
+                }
+            }
+            else if (soldier instanceof ShieldViking) {
+                if (image.getImage().equals(imageShiedlViking1)) {
+                    image.setImage(imageShiedlViking2);
+                }
+                else {
+                    image.setImage(imageShiedlViking1);
+                }
+            }
+        }
+        else {
+            if (this.image.getImage().equals(imageBurial1)) {
+                this.image.setImage(imageBurial2);
+            } else if (this.image.getImage().equals(imageBurial2)) {
+                this.image.setImage(imageBurial3);
+            }
+            else if (this.image.getImage().equals(imageBurial3)) {
+                this.image.setImage(imageBurial4);
+            }
+        }
+    }
+
+    public void blow() {
+        if (this.soldier instanceof Enemy && !((Enemy) this.soldier).isOnCatle()) {
+            this.image.setImage(imageBurial1);
+            FadeTransition fade = new FadeTransition(Duration.seconds(1), image);
+            fade.setFromValue(1.0);
+            fade.setToValue(0.0);
+            fade.setOnFinished(event -> {
+                if (paneViewContainer.getParent() != null) {
+                    ((javafx.scene.layout.Pane) paneViewContainer.getParent()).getChildren().remove(paneViewContainer);
+                }
+            });
+            fade.play();
+        }
+        else {
+            ((javafx.scene.layout.Pane) paneViewContainer.getParent()).getChildren().remove(paneViewContainer);
+        }
+
+    }
+
+    public Soldier getSoldier() {
+        return soldier;
+    }
+    public double getX() {
+        return image.getX();
+    }
+    public double getY() {
+        return image.getY();
+    }
+    public int getId() {
+        return this.soldier.getId();
+    }
+    public Pane getPaneViewContainer() {
+        return paneViewContainer;
+    }
+
+
+    public double getTuileLine() {
+        double x = this.getImage().getLayoutX() + 20/2;
+        double posTuileX = (x - x%16);
+        posTuileX = posTuileX/16;
+        return posTuileX;
+    }
+
+    public double getTuileColumn() {
+        double y = this.getImage().getLayoutY() + 20/2;
+        double posTuileY = (y - y%16);
+        posTuileY = posTuileY/16;
+        return posTuileY;
+    }
+}
