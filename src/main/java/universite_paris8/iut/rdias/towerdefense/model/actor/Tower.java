@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
+import universite_paris8.iut.rdias.towerdefense.model.actor.targeting.NearestEnemyInRange;
 
 /*La sous-classe Tower qui hérite de Actor.
 * Une tower a comme attribut spécifique:
@@ -27,21 +28,9 @@ public abstract class Tower extends Actor{
         this.speedAct = speedAct;
         this.cooldown = speedAct*30;
         this.level = new SimpleIntegerProperty(1);
+        setTargeting(new NearestEnemyInRange());
     }
 
-    public Actor searchTarget() {
-        Enemy closest = null;
-        double minDist = Math.pow(getRange(), 2);
-        for (Enemy e : getEnvironnement().getEnemies()) {
-            if (!e.isLiving()) continue;
-            double dist = calcDistanceFromTargerUsingPyth(e);
-            if (dist < minDist) {
-                minDist = dist;
-                closest = e;
-            }
-        }
-        return closest;
-    }
 
     //Getter
     public int getCost() {
