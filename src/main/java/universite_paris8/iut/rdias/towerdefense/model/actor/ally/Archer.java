@@ -4,6 +4,7 @@ package universite_paris8.iut.rdias.towerdefense.model.actor.ally;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.Projectile;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
+import universite_paris8.iut.rdias.towerdefense.model.actor.ShootingTower;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
 
 /*La sous-classe de la tour archer qui hérite de Tower
@@ -11,7 +12,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
  * avec des fléches.*/
 
 
-public class Archer extends Tower {
+public class Archer extends ShootingTower {
     public Archer(Environnement aEnv,int archerId, double aX, double aY) {
         super(  aEnv,
                 aEnv.getSettings().getArcherHp(),
@@ -36,6 +37,11 @@ public class Archer extends Tower {
                 resetCooldown();
             }
         }
+    }
+
+    @Override
+    protected void attack(Enemy target) {
+        getEnvironnement().addEffect(new Projectile(getEnvironnement(),getX(),getY(),getDmg(),target));
     }
 
     @Override
