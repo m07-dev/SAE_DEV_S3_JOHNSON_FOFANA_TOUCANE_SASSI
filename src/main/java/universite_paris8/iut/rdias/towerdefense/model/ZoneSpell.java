@@ -23,32 +23,8 @@ public class ZoneSpell extends Effect {
     }
 
     @Override
-    public void act() {
-        if (getTarget() == null || !getTarget().isLiving()) {
-            finished();
-        }
-        double dX = (getTarget().getX()) - getX();
-        double dY = (getTarget().getY()) - getY();
-        double dist = Math.hypot(dX, dY);
-
-        if (dist < getSpeed() && !isFinished()) {
-            damageInZoneAround(getTarget());
-            finished();
-        } else {
-            majDirectionEtAngle(dX, dY, dist);
-            setX(getX() + (getDirectionX() * getSpeed()));
-            setY(getY() + (getDirectionY() * getSpeed()));
-        }
-    }
-
-
-    public void majDirectionEtAngle(double dx, double dy, double dist) {
-        if (dist > 0) {
-            directionXProperty().set(dx / dist);
-            directionYProperty().set(dy / dist);
-            double angleDegres = Math.toDegrees(Math.atan2(getDirectionY(), getDirectionX()));
-            setAngle(angleDegres);
-        }
+    protected void onImpact(Actor target) {
+        damageInZoneAround(target);
     }
 
     private void damageInZoneAround(Actor target) {

@@ -50,7 +50,35 @@ public abstract class Effect {
         angle = new SimpleDoubleProperty(0);
     }
 
-    public abstract void act();
+    public void act(){
+        if (target == null || !target.isLiving()) {
+            finished();
+        }
+        else {
+            double dX = target.getX() - getX();
+            double dY = target.getY() - getY();
+            double dist = Math.hypot(dX, dY);
+
+            if (dist < speed) {
+                onImpact(target);     // seule etape qui varie
+                finished();
+            } else {
+                majDirectionEtAngle(dX, dY, dist);
+                setX(getX() + getDirectionX() * speed);
+                setY(getY() + getDirectionY() * speed);
+            }
+        }
+    }
+
+    protected abstract void onImpact(Actor target);
+
+    protected void majDirectionEtAngle(double dx, double dy, double dist) {
+        if (dist > 0) {
+            directionX.set(dx / dist);
+            directionY.set(dy / dist);
+            setAngle(Math.toDegrees(Math.atan2(getDirectionY(), getDirectionX())));
+        }
+    }
 
     public boolean isFinished() { return finished; }
 
