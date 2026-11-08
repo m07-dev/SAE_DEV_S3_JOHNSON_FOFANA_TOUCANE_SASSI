@@ -5,6 +5,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
+import universite_paris8.iut.rdias.towerdefense.model.actor.targeting.NearestPalissade;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,7 @@ public class BatteringRam extends Enemy {
                 rEnv.getSettings().getBatteringRamDeathValue(),
                 rEnv.getSettings().getBatteringRamSpeedAct()
         );
+        setTargeting(new NearestPalissade());
     }
 
     @Override
@@ -69,18 +71,5 @@ public class BatteringRam extends Enemy {
         }
     }
 
-    public Actor searchTarget() {
-        Tower closeTarget = null;
-        double minRange = Double.MAX_VALUE;
-        for (Tower t : getEnvironnement().getTowers()) {
-            if ((t instanceof Palissade) && t.isLiving()) {
-                double range = calcDistanceFromTargerUsingPyth(t); // calcul distance via pythagore
-                if (range <= minRange) { //(range <= getRange() && range < minRange) {
-                    minRange = range;
-                    closeTarget = t;
-                }
-            }
-        }
-        return closeTarget;
-    }
+
 }
