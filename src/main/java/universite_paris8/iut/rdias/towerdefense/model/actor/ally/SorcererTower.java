@@ -31,18 +31,6 @@ public class SorcererTower extends ShootingTower {
         radiusBlow = sEnv.getSettings().getSorcererRadiusBlow();
     }
 
-    @Override
-    public void act(){
-        tick();
-        if (canAct()){
-            Enemy target = (Enemy) searchTarget();
-            if (target != null){
-                ZoneSpell zp = new ZoneSpell(getEnvironnement(), getX(), getY(), getDmg(), target, radiusBlow);
-                getEnvironnement().addEffect(zp);
-                resetCooldown();
-            }
-        }
-    }
 
     @Override
     protected void attack(Enemy target) {

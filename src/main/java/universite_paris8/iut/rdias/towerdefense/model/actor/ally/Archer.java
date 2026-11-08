@@ -26,18 +26,6 @@ public class Archer extends ShootingTower {
         );
     }
 
-    @Override
-    public void act() {
-        tick();
-        if (canAct()){
-            Enemy target = (Enemy) searchTarget();
-            if (target != null) {
-                Projectile proj = new Projectile(getEnvironnement(), getX(), getY(), this.getDmg(), target);
-                getEnvironnement().addEffect(proj);
-                resetCooldown();
-            }
-        }
-    }
 
     @Override
     protected void attack(Enemy target) {
