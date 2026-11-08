@@ -4,6 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
+import universite_paris8.iut.rdias.towerdefense.model.algorithm.NearestEnemyStrategy;
+import universite_paris8.iut.rdias.towerdefense.model.algorithm.TargetingStrategy;
 
 /*La sous-classe Tower qui hérite de Actor.
 * Une tower a comme attribut spécifique:
@@ -19,6 +21,7 @@ public abstract class Tower extends Actor{
     private int speedAct; //en demi seconde (si 1 = une attaque possible toutes le 1/2 secondes
     private int cooldown;
     private IntegerProperty level;
+    private TargetingStrategy targetingStrategy;
 
 
     public Tower(Environnement env, int tHp, int tDmg, int tId, double tRange, double tX, double tY, int speedAct, int tCost) {
@@ -27,20 +30,11 @@ public abstract class Tower extends Actor{
         this.speedAct = speedAct;
         this.cooldown = speedAct*30;
         this.level = new SimpleIntegerProperty(1);
+        this.targetingStrategy = new NearestEnemyStrategy();
     }
 
     public Actor searchTarget() {
-        Enemy closest = null;
-        double minDist = Math.pow(getRange(), 2);
-        for (Enemy e : getEnvironnement().getEnemies()) {
-            if (!e.isLiving()) continue;
-            double dist = calcDistanceFromTargerUsingPyth(e);
-            if (dist < minDist) {
-                minDist = dist;
-                closest = e;
-            }
-        }
-        return closest;
+        return targetingStrategy.findTarget(this);
     }
 
     //Getter
@@ -162,5 +156,9 @@ public abstract class Tower extends Actor{
     @Override
     public boolean isInReachOf(Actor attacker) {
         return attacker.calcDistanceFromTargerUsingPyth(this) < Math.pow(attacker.getRange(), 2);
+    }
+
+    public void setTargetingStrategy(TargetingStrategy targetingStrategy) {
+        this.targetingStrategy = targetingStrategy;
     }
 }
