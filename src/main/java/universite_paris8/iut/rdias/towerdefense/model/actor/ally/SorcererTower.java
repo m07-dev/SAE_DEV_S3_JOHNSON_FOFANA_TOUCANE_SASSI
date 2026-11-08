@@ -3,6 +3,7 @@ package universite_paris8.iut.rdias.towerdefense.model.actor.ally;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.ZoneSpell;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
+import universite_paris8.iut.rdias.towerdefense.model.actor.ShootingTower;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
 
 /*La sous-classe SorcererTower qui hérite de Tower.
@@ -13,7 +14,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
  * -le rayon de l'explosion de ses boules de feu
  */
 
-public class SorcererTower extends Tower {
+public class SorcererTower extends ShootingTower {
     private double radiusBlow;
 
     public SorcererTower(Environnement sEnv, int sorcererId, double sorcererX, double sorcererY) {
@@ -41,6 +42,12 @@ public class SorcererTower extends Tower {
                 resetCooldown();
             }
         }
+    }
+
+    @Override
+    protected void attack(Enemy target) {
+        getEnvironnement().addEffect(
+                new ZoneSpell(getEnvironnement(), getX(), getY(), getDmg(), target, radiusBlow));
     }
 
     @Override
