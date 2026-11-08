@@ -98,17 +98,6 @@ public abstract class Actor {
     public void die(){ ////////
         this.hp.setValue(0);
         try {
-            if (this instanceof Enemy) {
-                if (!((Enemy) this).isOnCatle()) {
-                    env.earn(((Enemy) this).getDeathValue());
-                }
-            }
-            else if (this instanceof Knight) {
-                ((Knight) this).getBase().decrementNbKnight();
-            }
-            else if (this instanceof Palissade) {
-                ((Palissade) this).deleted();
-            }
             this.env.addDyingActor(this);
         } catch (Exception ex) {
             System.out.println("  EXCEPTION: " + ex.getMessage());

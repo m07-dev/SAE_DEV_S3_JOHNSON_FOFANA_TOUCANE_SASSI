@@ -54,4 +54,10 @@ public class Knight extends Soldier {
     public Barrack getBase() {
         return base;
     }
+
+    @Override
+    public void die() {
+        base.decrementNbKnight();
+        super.die();
+    }
 }

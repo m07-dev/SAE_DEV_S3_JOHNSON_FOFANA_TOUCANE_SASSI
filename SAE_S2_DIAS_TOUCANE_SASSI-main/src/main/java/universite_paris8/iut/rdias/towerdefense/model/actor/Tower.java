@@ -94,9 +94,6 @@ public abstract class Tower extends Actor{
 
     public void sell(){
         int refund = this.cost / 2;
-        if (this instanceof Palissade) {
-            ((Palissade) this).deleted();
-        }
         getEnvironnement().earn(refund);
         getEnvironnement().delTower(this);
     }

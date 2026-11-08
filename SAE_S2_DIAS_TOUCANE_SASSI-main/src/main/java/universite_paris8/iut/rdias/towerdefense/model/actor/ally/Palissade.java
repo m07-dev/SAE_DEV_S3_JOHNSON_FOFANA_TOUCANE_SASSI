@@ -56,4 +56,16 @@ public class Palissade extends Tower {
     public int maxAllowed() {
         return 4;
     }
+
+    @Override
+    public void die() {
+        deleted();
+        super.die();
+    }
+
+    @Override
+    public void sell() {
+        deleted();
+        super.sell();
+    }
 }
