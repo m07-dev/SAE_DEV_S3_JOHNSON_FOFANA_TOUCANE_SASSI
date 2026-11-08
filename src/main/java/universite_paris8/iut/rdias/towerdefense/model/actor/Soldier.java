@@ -1,6 +1,7 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor;
 
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
+import universite_paris8.iut.rdias.towerdefense.model.actor.targeting.NearestEnemyByPath;
 
 /*La sous-classe Soldier qui extend Actor.
  * Un soldier a comme attribut spécifique:
@@ -42,6 +43,7 @@ public abstract class Soldier extends Actor{
         this.slowDuration = 0;
         this.speedAct = sSpeedAct; //temp
         this.cooldown = speedAct*30;
+        setTargeting(new NearestEnemyByPath());
     }
     public void setChemin() {
         majDirection();
@@ -131,20 +133,6 @@ public abstract class Soldier extends Actor{
         majDirection();
     }
 
-    public Actor searchTarget() {
-        Enemy closeTarget = null;
-        double minRange = Double.MAX_VALUE;
-        for (Enemy e : getEnvironnement().getEnemies()) {
-            if (e.isLiving()) {
-                int range = calcDistanceFromTargerUsingBFS(e);
-                if (range<= minRange) {
-                    minRange = range;
-                    closeTarget = e;
-                }
-            }
-        }
-        return closeTarget;
-    }
 
     public double getSpeed() {
         return speed;
