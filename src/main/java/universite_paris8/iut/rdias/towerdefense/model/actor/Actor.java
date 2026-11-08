@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
+import universite_paris8.iut.rdias.towerdefense.model.actor.targeting.TargetingStrategy;
 
 /*La super classe abstraite Actor définit le comportement commun
  * à toutes les entités du jeu (ennemis, tours, etc.).
@@ -23,6 +24,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
 */
 
 public abstract class Actor {
+    private TargetingStrategy targeting;
     private Environnement env;
     private IntegerProperty hp;
     private int dmg;
@@ -42,9 +44,9 @@ public abstract class Actor {
         this.y = new SimpleDoubleProperty(aY);
         this.maxHp = aHp;
     }
-
+    public void setTargeting(TargetingStrategy t) { this.targeting = t; }
     public abstract void act();
-    public abstract Actor searchTarget();
+    public Actor searchTarget() { return targeting == null ? null : targeting.findTarget(this); }
     public int calcDistanceFromTargerUsingBFS(Actor a) {
         return getEnvironnement().getGround().getMapBFS().getDistancesMap()[(int)this.getY()][(int)this.getX()][(int)a.getY()][(int)a.getX()];
     }
