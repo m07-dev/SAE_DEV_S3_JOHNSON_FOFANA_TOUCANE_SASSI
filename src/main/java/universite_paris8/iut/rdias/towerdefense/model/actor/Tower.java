@@ -3,9 +3,8 @@ package universite_paris8.iut.rdias.towerdefense.model.actor;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
-import universite_paris8.iut.rdias.towerdefense.model.algorithm.NearestEnemyStrategy;
-import universite_paris8.iut.rdias.towerdefense.model.algorithm.TargetingStrategy;
+import universite_paris8.iut.rdias.towerdefense.model.algorithm.Targeting.NearestEnemyStrategy;
+import universite_paris8.iut.rdias.towerdefense.model.algorithm.Targeting.TargetingStrategy;
 
 /*La sous-classe Tower qui hérite de Actor.
 * Une tower a comme attribut spécifique:

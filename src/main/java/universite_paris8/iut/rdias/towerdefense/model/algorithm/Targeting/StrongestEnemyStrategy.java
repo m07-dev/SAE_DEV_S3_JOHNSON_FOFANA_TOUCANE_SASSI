@@ -1,21 +1,20 @@
-package universite_paris8.iut.rdias.towerdefense.model.algorithm;
+package universite_paris8.iut.rdias.towerdefense.model.algorithm.Targeting;
 
 import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
 
-public class FastestEnemyStrategy implements TargetingStrategy{
-
+public class StrongestEnemyStrategy implements TargetingStrategy{
     @Override
     public Actor findTarget(Tower tower) {
-        Enemy fastest = null;
+        Enemy strongest = null;
         double minDist = Math.pow(tower.getRange(), 2);
         for (Enemy e : tower.getEnvironnement().getEnemies()) {
             if (!e.isLiving()) continue;
-            if (tower.calcDistanceFromTargerUsingPyth(e) < minDist && (fastest == null || e.getSpeed() > fastest.getSpeed())) {
-                fastest = e;
+            if (tower.calcDistanceFromTargerUsingPyth(e) < minDist && (strongest == null || e.getHp() > strongest.getHp())) {
+                strongest = e;
             }
         }
-        return fastest;
+        return strongest;
     }
 }
