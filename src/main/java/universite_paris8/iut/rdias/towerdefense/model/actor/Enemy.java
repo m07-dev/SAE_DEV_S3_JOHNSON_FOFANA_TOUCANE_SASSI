@@ -62,4 +62,8 @@ public abstract class Enemy extends Soldier {
             die();
         }
     }
+
+    public void removeFromEnvironment() {
+        getEnvironnement().delEnemy(this);
+    }
 }

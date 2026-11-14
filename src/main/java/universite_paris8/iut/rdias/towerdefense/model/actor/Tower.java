@@ -174,4 +174,8 @@ public abstract class Tower extends Actor{
     public TargetingMode getTargetingMode() {
         return targetingMode;
     }
+
+    public void removeFromEnvironment() {
+        getEnvironnement().delTower(this);
+    }
 }

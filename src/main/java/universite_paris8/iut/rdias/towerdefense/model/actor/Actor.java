@@ -132,5 +132,7 @@ public abstract class Actor {
         this.maxHp = maxHp;
     }
 
+    public abstract void removeFromEnvironment();
+
 
 }

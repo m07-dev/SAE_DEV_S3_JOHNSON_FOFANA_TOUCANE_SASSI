@@ -1,6 +1,7 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor;
 
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
+import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
 
 /*La sous-classe Soldier qui extend Actor.
  * Un soldier a comme attribut spécifique:
@@ -198,5 +199,9 @@ public abstract class Soldier extends Actor{
     @Override
     public boolean isInReachOf(Actor attacker) {
         return attacker.calcDistanceFromTargetUsingBFS(this) < attacker.getRange();
+    }
+
+    public void removeFromEnvironment() {
+        getEnvironnement().delKnight((Knight) this);
     }
 }

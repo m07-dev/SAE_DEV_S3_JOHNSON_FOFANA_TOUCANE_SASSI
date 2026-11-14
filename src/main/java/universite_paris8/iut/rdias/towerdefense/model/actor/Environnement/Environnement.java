@@ -147,15 +147,7 @@ public class Environnement {
         }
 
         for (Actor a : actorsDying) {
-            if (a instanceof Enemy) {
-                delEnemy((Enemy) a);
-            }
-            else if (a instanceof Tower) {
-                delTower((Tower) a);
-            }
-            else if (a instanceof Knight) {
-                delKnight((Knight) a);
-            }
+            a.removeFromEnvironment();
         }
         for (Effect e : effectsDying) {
             killEffect(e);
