@@ -4,6 +4,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
 
+// strategie par default visant les ennemies les plus proches
 public class NearestEnemyStrategy implements TargetingStrategy {
 
     @Override

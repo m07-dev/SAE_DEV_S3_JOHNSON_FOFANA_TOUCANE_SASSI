@@ -4,6 +4,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Enviro
 import universite_paris8.iut.rdias.towerdefense.model.ZoneSpell;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.algorithm.Targeting.TargetingMode;
 
 /*La sous-classe SorcererTower qui hérite de Tower.
  * Cette tour attaque à distance avec des boules de feu
@@ -28,6 +29,7 @@ public class SorcererTower extends Tower {
                 sEnv.getSettings().getSorcererTowerCost()
         );
         radiusBlow = sEnv.getSettings().getSorcererRadiusBlow();
+        setTargetingMode(TargetingMode.STRONGEST);  //il va tirer sur le plus fort
     }
 
     @Override

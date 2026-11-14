@@ -4,6 +4,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
 
+// strategie visant les ennemies les plus rapides
 public class FastestEnemyStrategy implements TargetingStrategy{
 
     @Override

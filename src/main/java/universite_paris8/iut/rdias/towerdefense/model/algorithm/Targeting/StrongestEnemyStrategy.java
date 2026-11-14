@@ -4,6 +4,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
 
+// strategie visant l'ennemie avec le plus de pv
 public class StrongestEnemyStrategy implements TargetingStrategy{
     @Override
     public Actor findTarget(Tower tower) {

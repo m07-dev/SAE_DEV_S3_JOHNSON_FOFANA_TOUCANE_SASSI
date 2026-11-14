@@ -3,7 +3,7 @@ package universite_paris8.iut.rdias.towerdefense.model.actor;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.algorithm.Targeting.NearestEnemyStrategy;
+import universite_paris8.iut.rdias.towerdefense.model.algorithm.Targeting.TargetingMode;
 import universite_paris8.iut.rdias.towerdefense.model.algorithm.Targeting.TargetingStrategy;
 
 /*La sous-classe Tower qui hérite de Actor.
@@ -21,6 +21,7 @@ public abstract class Tower extends Actor{
     private int cooldown;
     private IntegerProperty level;
     private TargetingStrategy targetingStrategy;
+    private TargetingMode targetingMode;
 
 
     public Tower(Environnement env, int tHp, int tDmg, int tId, double tRange, double tX, double tY, int speedAct, int tCost) {
@@ -29,7 +30,7 @@ public abstract class Tower extends Actor{
         this.speedAct = speedAct;
         this.cooldown = speedAct*30;
         this.level = new SimpleIntegerProperty(1);
-        this.targetingStrategy = new NearestEnemyStrategy();
+        setTargetingMode(TargetingMode.NEAREST);
     }
 
     public Actor searchTarget() {
@@ -159,5 +160,18 @@ public abstract class Tower extends Actor{
 
     public void setTargetingStrategy(TargetingStrategy targetingStrategy) {
         this.targetingStrategy = targetingStrategy;
+    }
+
+    public void setTargetingMode(TargetingMode mode) {
+        this.targetingMode = mode;
+        this.targetingStrategy = mode.getStrategy();
+    }
+
+    public void cycleTargeting() {
+        setTargetingMode(targetingMode.next());
+    }
+
+    public TargetingMode getTargetingMode() {
+        return targetingMode;
     }
 }
