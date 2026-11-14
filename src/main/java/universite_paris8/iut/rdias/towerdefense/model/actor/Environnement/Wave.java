@@ -133,7 +133,7 @@ public class Wave {
                 e = new Viking(env, env.getNextId(), col, line);
             }
         }
-        else if (waveIndex <= 10) {
+        else {
             if (radomSelectEnemy < 10) {
                 e = new BatteringRam(env, env.getNextId(), col, line);
             }
