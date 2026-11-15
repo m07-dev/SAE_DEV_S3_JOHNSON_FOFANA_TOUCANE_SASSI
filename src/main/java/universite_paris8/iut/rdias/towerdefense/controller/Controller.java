@@ -341,20 +341,6 @@ public class Controller {
         mapGrid.setOnMouseMoved(null);
     }
 
-    /*private double getTowerRange(int towerType) {
-        switch (towerType) {
-            case TOWER_ARCHER -> {
-                return env.getSettings().getArcherRange() * TILE_SIZE;
-            }
-            case TOWER_SORCERER -> {
-                return env.getSettings().getSorcererRange() * TILE_SIZE;
-            }
-            case TOWER_BALLISTA -> {
-                return env.getSettings().getBallistaRange() * TILE_SIZE;
-            }
-        }
-        return 0;
-    }*/
 
     // Tower Placement
     private void addTower(int towerType, int col, int line) {

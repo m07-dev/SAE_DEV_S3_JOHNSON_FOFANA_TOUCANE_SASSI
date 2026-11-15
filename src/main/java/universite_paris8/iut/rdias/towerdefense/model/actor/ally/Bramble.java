@@ -62,9 +62,7 @@ public class Bramble extends Tower {
     @Override
     public boolean canBePlaced(int line, int col) {
         Ground ground = getEnvironnement().getGround();
-        if (line < 0 || line >= ground.heigth() || col < 0 || col >= ground.width()) {
-            return false;
-        }
+        if (!ground.isInside(line, col)) { return false; }
         return ground.isPath(line, col);
     }
 
