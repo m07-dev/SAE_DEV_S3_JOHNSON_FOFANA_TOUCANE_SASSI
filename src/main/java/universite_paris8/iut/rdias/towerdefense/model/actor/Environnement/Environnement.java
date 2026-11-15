@@ -134,13 +134,19 @@ public class Environnement {
     public void loop() {
         wave.waveLoop();
         for (Knight k : knights) {
-            k.act();
+            if(k.isLiving()){
+                k.act();
+            }
         }
         for (Tower t : towers) {
-            t.act();
+            if(t.isLiving()){
+                t.act();
+            }
         }
         for (Enemy e : enemies) {
-            e.act();
+            if(e.isLiving()){
+                e.act();
+            }
         }
         for (Effect ef : effects) {
             ef.act();
