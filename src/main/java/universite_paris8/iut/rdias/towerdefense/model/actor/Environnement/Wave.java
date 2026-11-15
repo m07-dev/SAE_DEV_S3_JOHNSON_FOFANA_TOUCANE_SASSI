@@ -2,6 +2,7 @@ package universite_paris8.iut.rdias.towerdefense.model.actor.Environnement;
 
 import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.*;
+import universite_paris8.iut.rdias.towerdefense.model.factory.EnemyFactory;
 
 /*La classe Wave représente une vague d'ennemis.
  * Cette classe gère la création et le spawn des ennemis
@@ -66,7 +67,6 @@ public class Wave {
 
             Enemy e = createNewEnemy(col, line);
             env.addEnemy(e);
-            env.incrementId();
             nbEnemies--;
         }
         else if (nbEnemies==0 && waveCptLap % (delayBetweenSpawns*30*2) == 0) {
@@ -94,63 +94,7 @@ public class Wave {
     }
 
     public Enemy createNewEnemy(int col, int line) {
-        Enemy e = null;
-        int radomSelectEnemy = (int) (Math.random() * 100);
-
-        if (waveIndex <= 1) {
-            e = new ArcherViking(env, env.getNextId(), col, line);
-        }
-        else if (waveIndex <= 3) {
-            if (radomSelectEnemy < 30) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
-            }
-            else {
-                e = new Viking(env, env.getNextId(), col, line);
-            }
-        }
-        else if (waveIndex <= 5) {
-            if (radomSelectEnemy < 30) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
-            }
-            else if (radomSelectEnemy < 50) {
-                e = new Berserker(env, env.getNextId(), col, line);
-            }
-            else {
-                e = new Viking(env,env.getNextId(), col, line);
-            }
-        }
-        else if (waveIndex <= 8) {
-            if (radomSelectEnemy < 10) {
-                e = new ShieldViking(env, env.getNextId(), col, line);
-            }
-            else if (radomSelectEnemy < 20) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
-            }
-            else if (radomSelectEnemy < 30) {
-                e = new Berserker(env, env.getNextId(), col, line);
-            }
-            else {
-                e = new Viking(env, env.getNextId(), col, line);
-            }
-        }
-        else {
-            if (radomSelectEnemy < 10) {
-                e = new BatteringRam(env, env.getNextId(), col, line);
-            }
-            else if (radomSelectEnemy < 15) {
-                e = new ShieldViking(env, env.getNextId(), col, line);
-            }
-            else if (radomSelectEnemy < 20) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
-            }
-            else if (radomSelectEnemy < 25) {
-                e = new Berserker(env, env.getNextId(), col, line);
-            }
-            else {
-                e = new Viking(env, env.getNextId(), col, line);
-            }
-        }
-        return e;
+        return EnemyFactory.createForWave(waveIndex, env, env.getNextId(), col, line);
     }
 
 }
