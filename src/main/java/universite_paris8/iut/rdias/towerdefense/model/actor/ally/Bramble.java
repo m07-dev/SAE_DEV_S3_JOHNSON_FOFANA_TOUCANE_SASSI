@@ -1,9 +1,11 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor.ally;
 
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.StaticActor;
 import universite_paris8.iut.rdias.towerdefense.model.Ground;
+import universite_paris8.iut.rdias.towerdefense.strategy.AttackStrategy;
+import universite_paris8.iut.rdias.towerdefense.strategy.FindTargetStrategy;
 
 /*La sous-classe Bramble qui hérite de Tower.
  * Cette tour ne possède pas d'attaque, elle se place
@@ -13,40 +15,29 @@ import universite_paris8.iut.rdias.towerdefense.model.Ground;
  * -son facteur de ralentissement
  * -la durée de son ralentissement
  */
-public class Bramble extends Tower {
-
+public class Bramble extends StaticActor {
     private double slowFactor;
-    private int slowDuration; //ralentis pendant 10sec
+    private int slowDuration;
 
-    public Bramble(Environnement bEnv, int brambleId, double brambleX, double brambleY) {
-        super(  bEnv,
-                1,
-                0,
-                brambleId,
-                0,
-                brambleX,
-                brambleY,
-                1,
-                bEnv.getSettings().getBrambleCost());
-        this.slowFactor = bEnv.getSettings().getBrambleSlowFactor();
-        this.slowDuration = bEnv.getSettings().getBrambleSlowDuration();
-    }
-
-    @Override
-    public void act() {
-        for (Enemy e : getEnvironnement().getEnemies()) {
-            if (onTile(e)) {
-                e.applySlow(this.slowFactor, this.slowDuration*30);
-            }
-        }
-    }
-
-    public boolean onTile(Enemy e){
-        int enemyX = (int) e.getX();
-        int enemyY = (int) e.getY();
-        int brambleX = (int) getX();
-        int brambleY = (int) getY();
-        return enemyX == brambleX && enemyY == brambleY;
+    public Bramble(Environnement env, int aId, int aHp, int maxHp, int aDmg, double aRange,
+                    double aLin, double aCol, Actor target, int coolDownDuration, int cost, int level, double slowFactor, int slowDuration) {
+        super(env,
+                aId,
+                aHp,
+                maxHp,
+                aDmg,
+                aRange,
+                aLin,
+                aCol,
+                target,
+                null,
+                null,
+                coolDownDuration,
+                cost,
+                level
+        );
+        this.slowFactor = slowFactor;
+        this.slowDuration = slowDuration;
     }
 
     @Override
@@ -55,7 +46,7 @@ public class Bramble extends Tower {
     }
 
     @Override
-    public void takeDamage(int amount) {
+    public void takeDamage(Actor attacker, int amount) {
         // Bramble ignore les dégâts
     }
 
@@ -76,5 +67,13 @@ public class Bramble extends Tower {
     @Override
     public boolean canBeUpgraded() {
         return false;
+    }
+
+    public double getSlowFactor() {
+        return slowFactor;
+    }
+
+    public int getSlowDuration() {
+        return slowDuration;
     }
 }

@@ -11,9 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
+import universite_paris8.iut.rdias.towerdefense.model.actor.MovingActor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Soldier;
 import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.*;
 
 /*
@@ -23,9 +22,9 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.*;
  * l'effet de dégâts (flash rouge) et l'animation de mort avec fondu progressif.
  */
 
-public class SoldierView {
+public class MovingActorView {
 
-    private Soldier soldier;
+    private MovingActor soldier;
     private Pane paneViewContainer;
     private ImageView image;
     private Rectangle pvBar;
@@ -57,7 +56,7 @@ public class SoldierView {
     private static Image imageBurial3 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/tombstone/sprite_tombstone3.png"));
     private static Image imageBurial4 = new Image(GroundView.class.getResourceAsStream(pathBegin + "/tombstone/sprite_tombstone4.png"));
 
-    public SoldierView(Soldier sSoldier) {
+    public MovingActorView(MovingActor sSoldier) {
         this.soldier = sSoldier;
         this.paneViewContainer = new Pane();
         this.pvBar = new Rectangle();
@@ -65,7 +64,7 @@ public class SoldierView {
         pvBar.setFill(Color.RED);
         int imageSize = 25;
 
-        if (soldier instanceof Viking) {
+        if (soldier instanceof BasicViking) {
             this.image = new ImageView(imageViking1);
             this.paneViewContainer.setId("v" + soldier.getId());
         }
@@ -119,8 +118,8 @@ public class SoldierView {
         pvBar.widthProperty().bind(sSoldier.getHpProperty().multiply(0.4));
         image.setFitWidth(imageSize);
         image.setFitHeight(imageSize);
-        this.image.layoutXProperty().bind(this.soldier.getXProperty().multiply(16).add(-16/2));
-        this.image.layoutYProperty().bind(this.soldier.getYProperty().multiply(16).add(-16/2));
+        this.image.layoutXProperty().bind(this.soldier.getColProperty().multiply(16).add(-16/2));
+        this.image.layoutYProperty().bind(this.soldier.getLinProperty().multiply(16).add(-16/2));
         pvBar.layoutXProperty().bind(image.layoutXProperty().add(imageSize/2).add(sSoldier.getHpProperty().multiply(0.4).multiply(-0.5)));
         pvBar.layoutYProperty().bind(image.layoutYProperty());
 
@@ -137,7 +136,7 @@ public class SoldierView {
 
     public void switchImage() {
         if (this.soldier.isLiving()) {
-            if (this.getSoldier() instanceof Viking) {
+            if (this.getSoldier() instanceof BasicViking) {
                 if (image.getImage().equals(imageViking1)) {
                     image.setImage(imageViking2);
                 } else {
@@ -196,7 +195,7 @@ public class SoldierView {
     }
 
     public void blow() {
-        if (this.soldier instanceof Enemy && !((Enemy) this.soldier).isOnCatle()) {
+        if (this.soldier instanceof Viking) {//&& !((Viking) this.soldier).isOnCatle()) {
             this.image.setImage(imageBurial1);
             FadeTransition fade = new FadeTransition(Duration.seconds(1), image);
             fade.setFromValue(1.0);
@@ -214,7 +213,7 @@ public class SoldierView {
 
     }
 
-    public Soldier getSoldier() {
+    public MovingActor getSoldier() {
         return soldier;
     }
     public double getX() {

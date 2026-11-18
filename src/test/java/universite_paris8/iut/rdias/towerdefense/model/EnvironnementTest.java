@@ -4,7 +4,6 @@ import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Barrack;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
@@ -59,9 +58,9 @@ class EnvironnementTest {
     @Test
     void testAddAndRemoveEffect() {
         Actor target = new Viking(env, 1, 5.0, 5.0);
-        Effect effect = new Projectile(env, 1.0, 1.0, 10, target);
+        Projectile effect = new Arrow(env, 1.0, 1.0, 10, target);
         env.addEffect(effect);
-        ObservableList<Effect> effects = env.getEffects();
+        ObservableList<Projectile> effects = env.getEffects();
         assertEquals(1, effects.size());
         assertTrue(effects.contains(effect));
 

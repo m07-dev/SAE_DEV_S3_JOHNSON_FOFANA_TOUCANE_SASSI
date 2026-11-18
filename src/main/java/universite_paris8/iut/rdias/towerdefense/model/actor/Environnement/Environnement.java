@@ -7,10 +7,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import universite_paris8.iut.rdias.towerdefense.model.*;
+import universite_paris8.iut.rdias.towerdefense.model.Factory.StaticActorFactory;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.*;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.StaticActor;
+import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.Viking;
 
 import java.util.ArrayList;
 
@@ -34,89 +35,87 @@ import java.util.ArrayList;
  */
 
 public class Environnement {
-
     private static int id = 1;
     private Ground ground;
     private Castle castle;
-    private ObservableList<Enemy> enemies;
+    private int time;
+    private ObservableList<Viking> vikings;
     private ObservableList<Knight> knights;
-    private ObservableList<Tower> towers;
-    private ObservableList<Effect> effects;
+    private ObservableList<StaticActor> staticActors;
+    private ObservableList<Projectile> effects;
     private ObservableList<Animation> animations;
     private ArrayList<Actor> actorsDying;
-    private ArrayList<Effect> effectsDying;
     private IntegerProperty balance;
     private Settings settings;
     private IntegerProperty waveIndex;
     private Wave wave;
+    private StaticActorFactory staticActorFactory;
+
 
 
     public Environnement(Ground ground) {
         this.ground = ground;
-        this.castle = new Castle();
-        this.enemies = FXCollections.observableArrayList();
+        this.castle = new Castle(this, 0, 500);
+        this.time = 0;
+        this.vikings = FXCollections.observableArrayList();
         this.knights = FXCollections.observableArrayList();
-        this.towers = FXCollections.observableArrayList();
+        this.staticActors = FXCollections.observableArrayList();
         this.effects = FXCollections.observableArrayList();
         this.animations = FXCollections.observableArrayList();
         this.actorsDying = new ArrayList<>();
-        this.effectsDying = new ArrayList<>();
-        this.balance = new SimpleIntegerProperty(350);
-        this.waveIndex = new SimpleIntegerProperty(1);
+        this.balance = new SimpleIntegerProperty(800);//350);
+        this.waveIndex = new SimpleIntegerProperty(10);
         this.settings = new Settings();
         this.wave = new Wave(this, waveIndex.get());
+        this.staticActorFactory = new StaticActorFactory(this);
     }
 
-    public void addEnemy(Enemy e){this.enemies.add(e);}
-    public void delEnemy(Enemy e){this.enemies.remove(e);}
+    public void addViking(Viking v){this.vikings.add(v);}
+    public void delViking(Viking v){this.vikings.remove(v);}
     public void addKnight(Knight k){this.knights.add(k);}
     public void delKnight(Knight k){this.knights.remove(k);}
-    public void addTower(Tower t) {
+    public void addTower(StaticActor t) {
         if (t instanceof Palissade) {
             ((Palissade) t).place();
         }
-        this.towers.add(t);
+        this.staticActors.add(t);
     }
 
-    private long countSameType(Tower t) { //Permet de compter le nombre de tours pour gérer le maximum de Bramble et Palissade
-        return towers.stream().filter(other -> other.getClass() == t.getClass()).count();
+    private long countSameType(StaticActor t) { //Permet de compter le nombre de tours pour gérer le maximum de Bramble et Palissade
+        return staticActors.stream().filter(other -> other.getClass() == t.getClass()).count();
     }
 
-    public void delTower(Tower t){this.towers.remove(t);}
+    public void delTower(StaticActor t){this.staticActors.remove(t);}
     public void addDyingActor(Actor a) {
         this.actorsDying.add(a);
     }
-    public void takeDmgCastle(int dmg) {
-        castle.takeDamage(dmg);
+    public void addEffect(Projectile e) {
+        effects.add(e);
     }
-    public void createTower(int towerType, int col, int line) {
-        Tower tower = null;
+    public void delEffect(Projectile e) {
+        effects.remove(e);
+    }
+
+    public void createTower(int towerType, int lin, int col) {
+        StaticActor tower = null;
         switch (towerType) {
-            case 1 -> tower = new Archer(this, getNextId(), col, line);
-            case 2 -> tower = new Barrack(this, getNextId(), col, line);
-            case 3 -> tower = new Bramble(this, getNextId(), col, line);
-            case 4 -> tower = new Palissade(this, getNextId(), col, line);
-            case 5 -> tower = new SorcererTower(this, getNextId(), col, line);
-            case 6 -> tower = new Ballista(this, getNextId(), col, line);
+            case 1 -> tower = (StaticActor) staticActorFactory.create(StaticActorFactory.Type.ARCHER, lin, col);
+            case 2 -> tower = (StaticActor) staticActorFactory.create(StaticActorFactory.Type.BARRACK, lin, col);
+            case 3 -> tower = (StaticActor) staticActorFactory.create(StaticActorFactory.Type.BRAMBLE, lin, col);
+            case 4 -> tower = (StaticActor) staticActorFactory.create(StaticActorFactory.Type.PALISSADE, lin, col);
+            case 5 -> tower = (StaticActor) staticActorFactory.create(StaticActorFactory.Type.SORCERER_TOWER, lin, col);
+            case 6 -> tower = (StaticActor) staticActorFactory.create(StaticActorFactory.Type.BALLISTA, lin, col);
         }
         if (tower != null
                 && balance.get() >= tower.getCost()
-                && tower.canBePlaced(line, col)
+                && tower.canBePlaced(lin, col)
                 && countSameType(tower) <= tower.maxAllowed()) {
             balance.setValue(balance.getValue() - tower.getCost());
             addTower(tower);
         }
     }
 
-    public void addEffect(Effect e) {
-        effects.add(e);
-    }
-    public void delEffect(Effect e) {
-        effectsDying.add(e);
-    }
-    public void killEffect(Effect e) {
-        effects.remove(e);
-    }
+
     public void addAnimation(Animation a) {
         animations.add(a);
     }
@@ -136,44 +135,44 @@ public class Environnement {
         for (Knight k : knights) {
             k.act();
         }
-        for (Tower t : towers) {
+        for (StaticActor t : staticActors) {
             t.act();
         }
-        for (Enemy e : enemies) {
+        for (Viking e : vikings) {
             e.act();
         }
-        for (Effect ef : effects) {
+        for (Projectile ef : effects) {
             ef.act();
         }
 
         for (Actor a : actorsDying) {
-            if (a instanceof Enemy) {
-                delEnemy((Enemy) a);
+            if (a instanceof Viking) {
+                delViking((Viking) a);
             }
-            else if (a instanceof Tower) {
-                delTower((Tower) a);
+            else if (a instanceof StaticActor) {
+                delTower((StaticActor) a);
             }
             else if (a instanceof Knight) {
                 delKnight((Knight) a);
             }
+            else if (a instanceof Projectile) {
+                delEffect((Projectile)a);
+            }
         }
-        for (Effect e : effectsDying) {
-            killEffect(e);
-        }
-        effectsDying.clear();
         actorsDying.clear();
+        time++;
     }
 
-    public ObservableList<Enemy> getEnemies() {
-        return enemies;
+    public ObservableList<Viking> getEnemies() {
+        return vikings;
     }
     public ObservableList<Knight> getKnights() {
         return knights;
     }
-    public ObservableList<Tower> getTowers() {
-        return towers;
+    public ObservableList<StaticActor> getTowers() {
+        return staticActors;
     }
-    public ObservableList<Effect> getEffects() {
+    public ObservableList<Projectile> getEffects() {
         return effects;
     }
     public ObservableList<Animation> getAnimations() {
@@ -199,7 +198,7 @@ public class Environnement {
     public void nextWave() {
         waveIndex.set(waveIndex.get() + 1);
         wave = new Wave(this, waveIndex.get());
-        enemies.clear();
+        vikings.clear();
     }
     public void startingWaveAnimation() {
         Animation nAnimation = new Animation(waveIndex.get()==1, wave.isMacronInflationActivated());
@@ -209,12 +208,15 @@ public class Environnement {
     public IntegerProperty getWaveIndexProperty() {
         return waveIndex;
     }
+    public int getCurrentTime() {
+        return time;
+    }
 
-    public void sellTower(Tower t) {
+    public void sellTower(StaticActor t) {
         t.sell();
     }
 
-    public boolean upgradeTower(Tower t) {
+    public boolean upgradeTower(StaticActor t) {
         if (!t.canBeUpgraded()) return false;
         if (balance.get() < t.getUpgradeCost()) return false;
         balance.setValue(balance.getValue() - t.getUpgradeCost());

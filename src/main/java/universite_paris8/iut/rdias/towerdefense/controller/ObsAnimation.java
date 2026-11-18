@@ -3,10 +3,7 @@ package universite_paris8.iut.rdias.towerdefense.controller;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
 import universite_paris8.iut.rdias.towerdefense.model.Animation;
-import universite_paris8.iut.rdias.towerdefense.model.Effect;
-import universite_paris8.iut.rdias.towerdefense.model.ZoneSpell;
 import universite_paris8.iut.rdias.towerdefense.view.AnimationView;
-import universite_paris8.iut.rdias.towerdefense.view.EffectView;
 
 import java.util.ArrayList;
 import java.util.List;

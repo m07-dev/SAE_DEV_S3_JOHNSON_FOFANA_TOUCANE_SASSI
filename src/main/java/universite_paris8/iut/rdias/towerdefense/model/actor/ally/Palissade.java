@@ -1,8 +1,11 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor.ally;
 
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.Ground;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.StaticActor;
+import universite_paris8.iut.rdias.towerdefense.strategy.AttackStrategy;
+import universite_paris8.iut.rdias.towerdefense.strategy.FindTargetStrategy;
 
 /*La sous-classe Palissade qui hérite de Tower.
  * Cette tour n'a pas d'attaque, elle se place sur le chemin
@@ -11,17 +14,23 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
  * sa portée d'attaque et sa vitesse d'attaque sont de zéro.
  */
 
-public class Palissade extends Tower {
-    public Palissade(Environnement pEnv, int palissadeId, double palissadeX, double palissadeY) {
-        super(pEnv,
-                pEnv.getSettings().getPalissadeHp(),
-                0,
-                palissadeId,
-                0,
-                palissadeX,
-                palissadeY,
-                1,
-                pEnv.getSettings().getPalissadeCost()
+public class Palissade extends StaticActor {
+    public Palissade(Environnement env, int aId, int aHp, int maxHp, int aDmg, double aRange,
+                     double aLin, double aCol, Actor target, int coolDownDuration, int cost, int level) {
+        super(env,
+                aId,
+                aHp,
+                maxHp,
+                aDmg,
+                aRange,
+                aLin,
+                aCol,
+                target,
+                null,
+                null,
+                coolDownDuration,
+                cost,
+                level
         );
     }
 
@@ -42,13 +51,23 @@ public class Palissade extends Tower {
     }
 
     public void place() {
-        getEnvironnement().getGround().setTile((int)this.getY(), (int)this.getX(), 4);
+        getEnvironnement().getGround().setTile((int)this.getLin(), (int)this.getCol(), 4);
         getEnvironnement().getGround().refreshBFS();
     }
 
+    @Override
+    public void die() {
+        super.die();
+        this.deleted();
+    }
+
+    public void sell() {
+        this.deleted();
+        super.sell();
+    }
+
     public void deleted() {
-        System.out.println("deleted");
-        getEnvironnement().getGround().setTile((int)this.getY(), (int)this.getX(), 1);
+        getEnvironnement().getGround().setTile((int)this.getLin(), (int)this.getCol(), 1);
         getEnvironnement().getGround().refreshBFS();
     }
 

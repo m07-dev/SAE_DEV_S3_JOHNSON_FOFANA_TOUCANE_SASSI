@@ -1,8 +1,11 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor.ally;
 
+import universite_paris8.iut.rdias.towerdefense.model.Factory.KnightFactory;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.StaticActor;
+import universite_paris8.iut.rdias.towerdefense.strategy.AttackStrategy;
+import universite_paris8.iut.rdias.towerdefense.strategy.FindTargetStrategy;
 
 
 /*La sous-classe Barrack qui hérite de Tower.
@@ -13,51 +16,47 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
  * -les coordonnées de la tile chemin la plus proche
  */
 
-public class Barrack extends Tower {
-    private int[] coordClosePath;
+public class Barrack extends StaticActor {
     private int nbKnight;
     private int nbKnightMax;
-
-    public Barrack (Environnement bEnv, int barrackId, double barrackX, double barrackY) {
-        super(  bEnv,
-                bEnv.getSettings().getBarrackHp(),
-                0,
-                barrackId,
-                0,
-                barrackX,
-                barrackY,
-                bEnv.getSettings().getBarrackSpeedProduction(),
-                bEnv.getSettings().getBarrackCost()
+    public Barrack(Environnement env, int aId, int aHp, int maxHp, int aDmg, double aRange,
+                    double aLin, double aCol, Actor target, int coolDownDuration, int cost, int level, int nbKnightMax) {
+        super(env,
+                aId,
+                aHp,
+                maxHp,
+                aDmg,
+                aRange,
+                aLin,
+                aCol,
+                target,
+                null,
+                null,
+                coolDownDuration,
+                cost,
+                level
         );
-        nbKnightMax = getEnvironnement().getSettings().getBarrackNbKnightMax();
-        coordClosePath = getEnvironnement().getGround().getClosestPath((int) getY(), (int) getX());
-        nbKnight = 0;
+        this.nbKnight = 0;
+        this.nbKnightMax = nbKnightMax;
+    }
+
+    public void act() {
+        if (nbKnight < nbKnightMax) {
+            getAttackStrategy().attack();
+        }
     }
 
     @Override
-    public void act() {
-        tick();
-        if (canAct() && hasEnemies(getEnvironnement()) && nbKnight < nbKnightMax) {
-            Knight k = new Knight(getEnvironnement(), getEnvironnement().getNextId(), coordClosePath[1], coordClosePath[0], this);
-            getEnvironnement().addKnight(k);
-            this.incrementNbKnight();
-            resetCooldown();
-        }
+    public int[] getClosestpath() {
+        return getEnvironnement().getGround().getClosestPath((int)getLin(), (int)getCol());
     }
 
-    public boolean hasEnemies(Environnement env) {
-        for (Enemy e : env.getEnemies()){
-            if (e.isLiving()) {
-                return true;
-            }
-        }
-        return false;
+    public int getNbKnight() {
+        return nbKnight;
     }
-
-    public int[] getCoordClosePath() {
-        return coordClosePath;
+    public int getNbKnightMax() {
+        return nbKnightMax;
     }
-
     public void incrementNbKnight() {
         nbKnight++;
     }

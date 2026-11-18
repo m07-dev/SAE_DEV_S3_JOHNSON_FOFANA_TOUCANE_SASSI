@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.*;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.StaticActor;
 
 /*
  * Gère l'affichage et l'animation des tours.
@@ -17,7 +17,7 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
  */
 
 public class TowerView {
-    private Tower tower;
+    private StaticActor tower;
     private Pane paneViewContainer;
     private ImageView image;
     private Rectangle hpBarFirst;
@@ -78,7 +78,7 @@ public class TowerView {
     private static Image spriteSorcererlvl2_3 = new Image(GroundView.class.getResourceAsStream(pathBegin + "wizard_tower_lvl2/sprite_towersorcerer2.3.png"));
     private static Image spriteSorcererlvl2_4 = new Image(GroundView.class.getResourceAsStream(pathBegin + "wizard_tower_lvl2/sprite_towersorcerer2.4.png"));
 
-    public TowerView(Tower tTower) {
+    public TowerView(StaticActor tTower) {
         this.tower = tTower;
         this.paneViewContainer = new Pane();
         this.image = new ImageView();
@@ -97,8 +97,8 @@ public class TowerView {
         });
 
         this.image.setId("t" + tTower.getId());
-        this.image.layoutXProperty().bind(this.tower.getXProperty().multiply(16).add(-16/2));
-        this.image.layoutYProperty().bind(this.tower.getYProperty().multiply(16).add(-16/2));
+        this.image.layoutXProperty().bind(this.tower.getColProperty().multiply(16).add(-16/2));
+        this.image.layoutYProperty().bind(this.tower.getLinProperty().multiply(16).add(-16/2));
         this.paneViewContainer.getChildren().add(this.image);
         if (!(tTower instanceof Bramble) && tower.getMaxHp() > 0) {
             createHpBar();
@@ -129,7 +129,7 @@ public class TowerView {
 
     public ImageView getImage() {
         return this.image;
-    }public Tower getTower() {
+    }public StaticActor getTower() {
         return tower;
     }
     public double getX() {

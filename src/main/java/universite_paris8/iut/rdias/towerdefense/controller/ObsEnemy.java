@@ -2,8 +2,9 @@ package universite_paris8.iut.rdias.towerdefense.controller;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
-import universite_paris8.iut.rdias.towerdefense.view.SoldierView;
+import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.Viking;
+import universite_paris8.iut.rdias.towerdefense.view.MovingActorView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,8 @@ import java.util.List;
  * Ajoute/supprime les ennemis visuels et gère l'animation de mort avec fondu progressif.
  */
 
-public class ObsEnemy implements ListChangeListener<Enemy> {
-    private ArrayList<SoldierView> enemiesSprite;
+public class ObsEnemy implements ListChangeListener<Viking> {
+    private ArrayList<MovingActorView> enemiesSprite;
     private Pane grid;
 
     public ObsEnemy(Pane oGrid) {
@@ -24,7 +25,7 @@ public class ObsEnemy implements ListChangeListener<Enemy> {
     }
 
     public void animate() {
-        for (SoldierView s : enemiesSprite) {
+        for (MovingActorView s : enemiesSprite) {
             try {
                 s.switchImage();
             } catch (Exception ex) {
@@ -35,19 +36,19 @@ public class ObsEnemy implements ListChangeListener<Enemy> {
     }
 
     @Override
-    public void onChanged(Change<? extends Enemy> change) {
+    public void onChanged(Change<? extends Viking> change) {
         while (change.next()) {
-            List<Enemy> ajout = (List<Enemy>) change.getAddedSubList();
-            List<Enemy> retirer = (List<Enemy>) change.getRemoved();
+            List<Viking> ajout = (List<Viking>) change.getAddedSubList();
+            List<Viking> retirer = (List<Viking>) change.getRemoved();
 
-            for (Enemy e : ajout) {
-                SoldierView s = new SoldierView(e);
+            for (Viking v : ajout) {
+                MovingActorView s = new MovingActorView(v);
                 grid.getChildren().add(s.getPaneViewContainer());
                 enemiesSprite.add(s);
             }
-            for (Enemy e : retirer) {
-                for (SoldierView sV : enemiesSprite) {
-                    if (sV.getId() == e.getId()) {
+            for (Viking v : retirer) {
+                for (MovingActorView sV : enemiesSprite) {
+                    if (sV.getId() == v.getId()) {
                         sV.blow();
                     }
                 }
@@ -55,7 +56,7 @@ public class ObsEnemy implements ListChangeListener<Enemy> {
         }
     }
 
-    public ArrayList<SoldierView> getEnemiesSprite() {
+    public ArrayList<MovingActorView> getEnemiesSprite() {
         return enemiesSprite;
     }
 

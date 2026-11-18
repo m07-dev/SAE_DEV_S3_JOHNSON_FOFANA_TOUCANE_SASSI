@@ -89,6 +89,7 @@ public class Ground {
         return this.map[ligne][col];
     }
 
+    public boolean doTileExist(int lin, int col) {return lin >= 0 && lin < this.heigth() && col >= 0 && col < this.width();}
     public boolean isPath(int ligne, int col) {
         return this.map[ligne][col]==1;
     }
@@ -100,6 +101,10 @@ public class Ground {
     }
     public boolean isGrass (int ligne, int col){ return this.map[ligne][col] == 0; }
     public boolean isPalissade (int ligne, int col){ return this.map[ligne][col] == 4; }
+    public boolean isWalkable(int lin, int col) {
+        return doTileExist(lin, col) && (isPath(lin, col) || isCastle(lin, col));
+    }
+
 
     public void setTile(int line, int column, int n) {
         this.map[line][column] = n;
@@ -112,26 +117,22 @@ public class Ground {
     public int[] getClosestPath(int line, int col) {
         int[] closePath = new int[2];
         for (int i=1; i<6; i++) {
-            if (col+i<width() &&
-                     isPath( line, col+i)) {
+            if (isWalkable(line, col+i)) {
                 closePath[0] = line;
                 closePath[1] = col+i;
                 return closePath;
             }
-            else if (col-i >= 0 &&
-                     isPath( line, col-i)) {
+            else if (isWalkable(line, col-i)) {
                 closePath[0] = line;
                 closePath[1] = col-i;
                 return closePath;
             }
-            else if (col+i <  heigth() &&
-                    isPath( line+i, col)) {
+            else if (isWalkable( line+i, col)) {
                 closePath[0] =  line+i;
                 closePath[1] = col;
                 return closePath;
             }
-            else if (line-i >= 0 &&
-                    isPath( line-i, col)) {
+            else if (isWalkable( line-i, col)) {
                 closePath[0] =  line-i;
                 closePath[1] = col;
                 return closePath;

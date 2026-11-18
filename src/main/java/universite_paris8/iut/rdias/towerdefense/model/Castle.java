@@ -2,6 +2,8 @@ package universite_paris8.iut.rdias.towerdefense.model;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 
 /*La classe Castle représente le château que le joueur
  * doit protéger.
@@ -14,12 +16,13 @@ import javafx.beans.property.SimpleIntegerProperty;
  * Deux attributs PV pour la barre de vie.
  */
 
-public class Castle {
+public class Castle extends Actor {
 
     private final int maxHp = 500;
     private IntegerProperty hpPlayer;
 
-    public Castle() {
+    public Castle(Environnement env, int id, int maxHp) {//40 42
+        super(env, id, maxHp, maxHp, 0, 0, 42, 40, null, null, null, 0);
         this.hpPlayer = new SimpleIntegerProperty(maxHp);
     }
 
@@ -31,8 +34,9 @@ public class Castle {
         return hpPlayer.get();
     }
 
-    public void takeDamage(int amount) {
+    public void takeDamage(Actor attacker, int amount) {
         hpPlayer.set(Math.max(0, hpPlayer.get() - amount));
+        this.getEnvironnement().addDyingActor(attacker);
     }
 
     public int getMaxHp() {

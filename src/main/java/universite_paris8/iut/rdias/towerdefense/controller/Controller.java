@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import universite_paris8.iut.rdias.towerdefense.model.*;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.StaticActor;
 import universite_paris8.iut.rdias.towerdefense.model.algorithm.BFS;
 import universite_paris8.iut.rdias.towerdefense.view.*;
 import javafx.animation.KeyFrame;
@@ -247,7 +247,7 @@ public class Controller {
         }
 
         // Check if clicking on existing tower
-        Tower tower = findTowerAt(col, line);
+        StaticActor tower = findTowerAt(line, col);
         if (tower != null) {
             stopDrag();
             showTowerMenu(tower);
@@ -256,22 +256,22 @@ public class Controller {
 
         // Place new tower
         if (towerSelected > 0) {
-            addTower(towerSelected, col, line);
+            addTower(towerSelected, line, col);
             towerSelected = 0;
             stopDrag();
         }
     }
 
-    private Tower findTowerAt(int col, int line) {
-        for (Tower t : env.getTowers()) {
-            if ((int)t.getX() == col && (int)t.getY() == line) {
+    private StaticActor findTowerAt(int lin, int col) {
+        for (StaticActor t : env.getTowers()) {
+            if ((int)t.getLin() == lin && (int)t.getCol() == col) {
                 return t;
             }
         }
         return null;
     }
 
-    private void showTowerMenu(Tower tower) {
+    private void showTowerMenu(StaticActor tower) {
         btnSell.setText("Sell (" + tower.getCost() / 2 + " 💰)");
 
         if (tower.canBeUpgraded()) {

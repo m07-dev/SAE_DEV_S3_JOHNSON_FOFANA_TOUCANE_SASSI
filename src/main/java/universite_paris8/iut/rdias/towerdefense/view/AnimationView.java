@@ -4,17 +4,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import universite_paris8.iut.rdias.towerdefense.controller.Controller;
 import universite_paris8.iut.rdias.towerdefense.model.Animation;
-import universite_paris8.iut.rdias.towerdefense.model.Effect;
 
 import javafx.animation.TranslateTransition;
-import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import javafx.animation.Interpolator;
 
 
 public class AnimationView {

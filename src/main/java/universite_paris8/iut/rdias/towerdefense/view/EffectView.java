@@ -5,8 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import universite_paris8.iut.rdias.towerdefense.model.Effect;
 import universite_paris8.iut.rdias.towerdefense.model.Projectile;
+import universite_paris8.iut.rdias.towerdefense.model.Arrow;
 import universite_paris8.iut.rdias.towerdefense.model.ZoneSpell;
 
 /*
@@ -24,22 +24,22 @@ public class EffectView {
     private static Image spriteFireBallBlowing = new Image(GroundView.class.getResourceAsStream(pathBegin + "/sprite_blow.png"));
     private ImageView image;
     private Pane paneViewContainer;
-    private Effect effect;
+    private Projectile effect;
     private int id;
 
-    public EffectView(Effect eEffect) {
+    public EffectView(Projectile eEffect) {
         this.effect = eEffect;
         this.paneViewContainer = new Pane();
-        if (effect instanceof Projectile) {
-            this.image = new ImageView(spriteArrow);
-        }
-        else if (effect instanceof ZoneSpell) {
+        if (effect instanceof ZoneSpell) {
             this.image = new ImageView(spriteFireBall);
+        }
+        else if (effect instanceof Arrow) {
+            this.image = new ImageView(spriteArrow);
         }
         this.paneViewContainer.setId("e" + effect.getId());
         this.id = effect.getId();
-        this.image.layoutXProperty().bind(effect.getXProperty().multiply(16).add(-16/2));
-        this.image.layoutYProperty().bind(effect.getYProperty().multiply(16).add(-16/2));
+        this.image.layoutXProperty().bind(effect.getColProperty().multiply(16).add(-16/2));
+        this.image.layoutYProperty().bind(effect.getLinProperty().multiply(16).add(-16/2));
         this.image.rotateProperty().bind(effect.angleProperty().add(0));
         this.paneViewContainer.getChildren().add(this.image);
     }
@@ -52,14 +52,14 @@ public class EffectView {
         if (effect instanceof ZoneSpell) {
             this.image.setImage(spriteFireBallBlowing);
             this.image.toBack();
-            this.image.setFitHeight((((ZoneSpell)effect).getZoneRadius()*2*16));
-            this.image.setFitWidth(((ZoneSpell)effect).getZoneRadius()*2*16);
+            this.image.setFitHeight((effect.getRange()/2)*2*16);
+            this.image.setFitWidth((effect.getRange()/2)*2*16);
             double x = this.image.getLayoutX();
             double y = this.image.getLayoutY();
             this.image.layoutXProperty().unbind();
             this.image.layoutYProperty().unbind();
-            this.image.setLayoutX(x - ((((ZoneSpell)effect).getZoneRadius()*16*2)/2));
-            this.image.setLayoutY(y - ((((ZoneSpell)effect).getZoneRadius()*16*2)/2));
+            this.image.setLayoutX(x - (((effect.getRange()/2)*2*16)/2));
+            this.image.setLayoutY(y - (((effect.getRange()/2)*2*16)/2));
 
             FadeTransition fade = new FadeTransition(Duration.seconds(0.5), image);
             fade.setFromValue(1.0);

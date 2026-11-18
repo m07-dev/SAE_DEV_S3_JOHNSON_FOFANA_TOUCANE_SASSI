@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TowerJunit {
 
     private Environnement env;
-    private Tower tower;
+    private StaticActor tower;
     private Ground ground;
 
     // Tests Upgrade
@@ -183,7 +183,7 @@ public class TowerJunit {
         }
 
         assertTrue(env.getTowers().size() > 0, "Une tour doit être créée");
-        Tower tower = env.getTowers().get(0);
+        StaticActor tower = env.getTowers().get(0);
         tower.sell();
         assertEquals(0, env.getTowers().size(), "La tour doit être supprimée");
     }

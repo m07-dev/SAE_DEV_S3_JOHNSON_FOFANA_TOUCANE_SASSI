@@ -1,45 +1,54 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor.ally;
 
 
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.Projectile;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Tower;
+import universite_paris8.iut.rdias.towerdefense.model.actor.StaticActor;
+import universite_paris8.iut.rdias.towerdefense.strategy.AttackStrategy;
+import universite_paris8.iut.rdias.towerdefense.strategy.FindTargetStrategy;
 
 /*La sous-classe de la tour archer qui hérite de Tower
  * est un allié que nous posons et qui attaque de loin
  * avec des fléches.*/
 
 
-public class Archer extends Tower {
-    public Archer(Environnement aEnv,int archerId, double aX, double aY) {
-        super(  aEnv,
-                aEnv.getSettings().getArcherHp(),
-                aEnv.getSettings().getArcherDmg(),
-                archerId,
-                aEnv.getSettings().getArcherRange(),
-                aX,
-                aY,
-                aEnv.getSettings().getArcherSpeedAttack(),
-                aEnv.getSettings().getArcherCost()
-        );
-    }
+public class Archer extends StaticActor {
+    public Archer(Environnement env, int aId, int aHp, int maxHp, int aDmg, double aRange,
+                  double aLin, double aCol, Actor target, AttackStrategy attackStrategy, FindTargetStrategy findTargetStrategy,
+                  int coolDownDuration, int cost, int level) {
+        super(env,
+                aId,
+                aHp,
+                maxHp,
+                aDmg,
+                aRange,
+                aLin,
+                aCol,
+                target,
+                attackStrategy,
+                findTargetStrategy,
+                coolDownDuration,
+                cost,
+                level);
 
-    @Override
-    public void act() {
-        tick();
-        if (canAct()){
-            Enemy target = (Enemy) searchTarget();
-            if (target != null) {
-                Projectile proj = new Projectile(getEnvironnement(), getX(), getY(), this.getDmg(), target);
-                getEnvironnement().addEffect(proj);
-                resetCooldown();
-            }
-        }
     }
+    public Archer(Environnement env, int aId, int aHp, int maxHp, int aDmg, double aRange,
+                  double aLin, double aCol, Actor target,
+                  int coolDownDuration, int cost, int level) {
+        super(env,
+                aId,
+                aHp,
+                maxHp,
+                aDmg,
+                aRange,
+                aLin,
+                aCol,
+                target,
+                null,
+                null,
+                coolDownDuration,
+                cost,
+                level);
 
-    @Override
-    public int placementRange(){
-        return 3;
     }
 }

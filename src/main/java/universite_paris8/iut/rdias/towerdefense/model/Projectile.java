@@ -1,48 +1,139 @@
 package universite_paris8.iut.rdias.towerdefense.model;
 
-import universite_paris8.iut.rdias.towerdefense.model.actor.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
+import universite_paris8.iut.rdias.towerdefense.strategy.AttackStrategy;
+import universite_paris8.iut.rdias.towerdefense.strategy.FindTargetStrategy;
 
-/*La sous-classe Projectile qui hérite de Effect.
- * Le projectile se déplace en ligne droite vers sa cible
- * à une vitesse définie. Lorsqu'il atteint sa cible,
- * il lui inflige des dégâts et disparaît.
- * Il met également à jour son angle de rotation
- * pour l'animation visuelle.
+import static universite_paris8.iut.rdias.towerdefense.utils.ActorUtils.calcSquaredDistanceBetween;
+import static universite_paris8.iut.rdias.towerdefense.utils.ActorUtils.isWithinRange;
+
+/*La classe abstraite Effect représente tous les effets
+ * visuels et projectiles dans le jeu (flèches, boules de feu, etc.).
+ * Les effets se déplacent vers leur cible et disparaissent
+ * lorsqu'ils l'atteignent.
+ * Un effect a comme attribut:
+ * -L'environnement où il est attribué
+ * -Sa position X et Y dans la map
+ * -Son identifiant unique
+ * -Ses dégâts infligés à la cible
+ * -Un booléen indiquant s'il est terminé
+ * -Sa cible (Actor)
+ * -Sa vitesse de déplacement
+ * -Sa direction sur l'axe X
+ * -Sa direction sur l'axe Y
+ * -Son angle de rotation (pour l'animation)
  */
 
-public class Projectile extends Effect{
+public abstract class Projectile extends Actor {
+    private double speed;
+    private boolean finished = false;
+    private DoubleProperty directionLin;
+    private DoubleProperty directionCol;
+    private DoubleProperty angle;
 
-    public Projectile(Environnement pEnv, double pX, double pY, int pDmg, Actor pTarget) {
-        super(pEnv, pX, pY, pDmg, pTarget, 0.20);
+    public Projectile(Environnement env, int id, int hp, int maxHp, int dmg, double range, double lin, double col,
+                      Actor target, AttackStrategy attackStrategy, FindTargetStrategy findTargetStrategy,
+                      int coolDownDuration, double speed) {
+        super(env, id, hp, maxHp, dmg, range, lin, col, target, attackStrategy, findTargetStrategy, coolDownDuration);
+        this.speed = speed;
+        this.directionLin = new SimpleDoubleProperty(0);
+        this.directionCol = new SimpleDoubleProperty(0);
+        this.angle = new SimpleDoubleProperty(0);
     }
 
-    @Override
     public void act() {
+        move();
         if (getTarget() == null || !getTarget().isLiving()) {
-            finished();
+            die();
         }
-        double dX = (getTarget().getX()) - getX();
-        double dY = (getTarget().getY()) - getY();
-        double dist = Math.hypot(dX, dY);
-
-        if (dist < getSpeed() && !isFinished()) {
-            getTarget().takeDamage(getDmg());
-            finished();
-        } else {
-            majDirectionEtAngle(dX, dY, dist);
-            setX(getX() + (getDirectionX() * getSpeed()));
-            setY(getY() + (getDirectionY() * getSpeed()));
+        else if (isWithinRange(this, getTarget(), speed)) {
+            getAttackStrategy().attack();
+            die();
         }
     }
 
+    public void move() {
+        double difLin = getTarget().getLin() - getLin();
+        double difCol = getTarget().getCol() - getCol();
 
-    public void majDirectionEtAngle(double dx, double dy, double dist) {
+        double squaredDifLin = Math.pow(difLin, 2);
+        double squaredDifCol = Math.pow(difCol, 2);
+
+        double dist = calcSquaredDistanceBetween(this, this.getTarget());
+
+        majDirectionEtAngle(
+                squaredDifCol * Math.signum(difCol),
+                squaredDifLin * Math.signum(difLin),
+                dist
+        );
+
+        setLin(getLin() + getDirectionLin() * getSpeed());
+        setCol(getCol() + getDirectionCol() * getSpeed());
+    }
+
+    public void majDirectionEtAngle(double dCol, double dLin, double dist) {
         if (dist > 0) {
-            directionXProperty().set(dx / dist);
-            directionYProperty().set(dy / dist);
-            double angleDegres = Math.toDegrees(Math.atan2(getDirectionY(), getDirectionX()));
+            directionLinProperty().set(dLin / dist);
+            directionColProperty().set(dCol / dist);
+            double angleDegres = Math.toDegrees(Math.atan2(getDirectionLin(), getDirectionCol()));
             setAngle(angleDegres);
         }
+    }
+
+    public boolean isFinished() { return finished; }
+
+//    public DoubleProperty getLinProperty() { return directionLin; }
+//
+//    public DoubleProperty getColProperty() { return directionCol; }
+//
+//    public double getLin() { return directionLin.getValue(); }
+//
+//    public double getCol() { return directionCol.getValue(); }
+
+    public void finished() {
+        finished = true;
+    }
+
+//    public void setLin(double lin) {
+//        directionLin.setValue(lin);
+//    }
+//
+//    public void setCol(double col) {
+//        directionCol.setValue(col);
+//    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public double getDirectionCol() {
+        return directionCol.getValue();
+    }
+
+    public DoubleProperty directionColProperty() {
+        return directionCol;
+    }
+
+    public double getDirectionLin() {
+        return directionLin.getValue();
+    }
+
+    public DoubleProperty directionLinProperty() {
+        return directionLin;
+    }
+
+    public double getAngle() {
+        return angle.get();
+    }
+
+    public DoubleProperty angleProperty() {
+        return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle.setValue(angle);
     }
 }

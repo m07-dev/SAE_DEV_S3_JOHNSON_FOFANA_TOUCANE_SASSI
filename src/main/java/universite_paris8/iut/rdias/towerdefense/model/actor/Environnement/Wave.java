@@ -1,6 +1,6 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor.Environnement;
 
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
+import universite_paris8.iut.rdias.towerdefense.model.Factory.VikingFactory;
 import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.*;
 
 /*La classe Wave représente une vague d'ennemis.
@@ -26,6 +26,7 @@ public class Wave {
     private int delayBetweenSpawns;
     private boolean macronInflationActivated;
     private int waveCptLap;
+    private VikingFactory vikingFactory;
 
     public Wave(Environnement env, int waveIndex) {
         this.env = env;
@@ -33,7 +34,8 @@ public class Wave {
         this.nbEnemies = (int)(10 + 20 * Math.log(waveIndex + 1));
         this.delayBetweenSpawns = 3;
         this.waveCptLap = 0;
-        // Ajout du système d'inflation
+        this.vikingFactory = new VikingFactory(env);
+
         if (waveIndex > 4) {
             int random = (int)(Math.random()*4);
             this.macronInflationActivated = random==3;
@@ -41,7 +43,7 @@ public class Wave {
         if (macronInflationActivated) {
             env.getSettings().inflation();
         }
-        // Augmentation de la difficulter des waves
+
         if (waveIndex >= 10 && waveIndex%5 == 0) {
             env.getSettings().multiplierStatsEnemy(1.3);
         }
@@ -61,11 +63,11 @@ public class Wave {
                 int random = (int)(Math.random() * spawnPoints.length);
                 spawn = spawnPoints[random];
             }
-            int line = spawn[0];
-            int col = spawn[1];
+            int line = spawn[1];
+            int col = spawn[0];
 
-            Enemy e = createNewEnemy(col, line);
-            env.addEnemy(e);
+            Viking v = createNewEnemy(line, col);
+            env.addViking(v);
             env.incrementId();
             nbEnemies--;
         }
@@ -93,64 +95,64 @@ public class Wave {
         return macronInflationActivated;
     }
 
-    public Enemy createNewEnemy(int col, int line) {
-        Enemy e = null;
+    public Viking createNewEnemy(int col, int lin) {
+        Viking viking = null;
         int radomSelectEnemy = (int) (Math.random() * 100);
 
         if (waveIndex <= 1) {
-            e = new Viking(env, env.getNextId(), col, line);
+            viking = (Viking) vikingFactory.create(VikingFactory.Type.BASIC_VIKING, lin, col);
         }
         else if (waveIndex <= 3) {
             if (radomSelectEnemy < 30) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BERSERKER, lin, col);
             }
             else {
-                e = new Viking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BASIC_VIKING, lin, col);
             }
         }
         else if (waveIndex <= 5) {
             if (radomSelectEnemy < 30) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BERSERKER, lin, col);
             }
             else if (radomSelectEnemy < 50) {
-                e = new Berserker(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.ARCHER_VIKING, lin, col);
             }
             else {
-                e = new Viking(env,env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BASIC_VIKING, lin, col);
             }
         }
         else if (waveIndex <= 8) {
             if (radomSelectEnemy < 10) {
-                e = new ShieldViking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.SHIELD_VIKING, lin, col);
             }
             else if (radomSelectEnemy < 20) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.ARCHER_VIKING, lin, col);
             }
             else if (radomSelectEnemy < 30) {
-                e = new Berserker(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BERSERKER, lin, col);
             }
             else {
-                e = new Viking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BASIC_VIKING, lin, col);
             }
         }
         else if (waveIndex <= 10) {
             if (radomSelectEnemy < 10) {
-                e = new BatteringRam(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BATTERING_RAM, lin, col);
             }
             else if (radomSelectEnemy < 15) {
-                e = new ShieldViking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.SHIELD_VIKING, lin, col);
             }
             else if (radomSelectEnemy < 20) {
-                e = new ArcherViking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.ARCHER_VIKING, lin, col);
             }
             else if (radomSelectEnemy < 25) {
-                e = new Berserker(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BERSERKER, lin, col);
             }
             else {
-                e = new Viking(env, env.getNextId(), col, line);
+                viking = (Viking) vikingFactory.create(VikingFactory.Type.BASIC_VIKING, lin, col);
             }
         }
-        return e;
+        return viking;
     }
 
 }

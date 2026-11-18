@@ -1,8 +1,9 @@
 package universite_paris8.iut.rdias.towerdefense.model.actor.ally;
 
+import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Enemy;
-import universite_paris8.iut.rdias.towerdefense.model.actor.Soldier;
+import universite_paris8.iut.rdias.towerdefense.model.actor.MovingActor;
+import universite_paris8.iut.rdias.towerdefense.strategy.*;
 
 /*La sous-classe Knight qui hérite de Soldier.
  * Le chevalier est spawné par la Barrack et se déplace
@@ -12,43 +13,33 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.Soldier;
  * -sa cible (target) qu'il doit attaquer
  */
 
-public class Knight extends Soldier {
-    private Enemy target;
+public class Knight extends MovingActor {
     private Barrack base;
 
-    public Knight(Environnement kEnv, int kId, double kX, double kY, Barrack kBase) {
-        super(  kEnv,
-                kEnv.getSettings().getKnightHp(),
-                kEnv.getSettings().getKnightDmg(),
-                kId,
-                1,
-                kX,
-                kY,
-                kEnv.getSettings().getKnightSpeed(),
-                kBase.getCoordClosePath()[1],
-                kBase.getCoordClosePath()[0],
-                kEnv.getSettings().getKnightSpeedAct()
+    public Knight(Environnement env, int id, int hp, int maxHp, int dmg, double range, double lin, double col,
+                  Actor target, int coolDown, double speed,
+                  Barrack base) {
+        super(env,
+                id,
+                hp,
+                maxHp,
+                dmg,
+                range,
+                lin,
+                col,
+                target,
+                null,
+                null,
+                coolDown,
+                speed
         );
-        this.base = kBase;
-        target = null;
+        this.base = base;
     }
 
-    public void act() {
-        tick();
-        this.target = (Enemy) searchTarget();
-        if (target != null && target.isLiving()) {
-            setxCible((int) target.getX());
-            setyCible((int) target.getY());
-        }
-        this.move();
-        if (target != null && calcDistanceFromTargerUsingBFS(target) < this.getRange() && canAct()) {
-            target.takeDamage(this.getDmg());
-            resetCooldown();
-        }
-        else if (target == null) {
-            setxCible(base.getCoordClosePath()[1]);
-            setyCible(base.getCoordClosePath()[0]);
-        }
+    @Override
+    public void die() {
+        super.die();
+        base.decrementNbKnight();
     }
 
     public Barrack getBase() {

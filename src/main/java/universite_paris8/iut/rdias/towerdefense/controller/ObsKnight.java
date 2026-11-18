@@ -4,8 +4,10 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
+
+import universite_paris8.iut.rdias.towerdefense.model.actor.MovingActor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
-import universite_paris8.iut.rdias.towerdefense.view.SoldierView;
+import universite_paris8.iut.rdias.towerdefense.view.MovingActorView;
 
 /*
  * Observer pour la gestion des chevaliers alliés à l'écran.
@@ -15,7 +17,7 @@ import universite_paris8.iut.rdias.towerdefense.view.SoldierView;
  */
 
 public class ObsKnight implements ListChangeListener<Knight> {
-    private ArrayList<SoldierView> knightSprite;
+    private ArrayList<MovingActorView> knightSprite;
     private Pane grid;
 
     public ObsKnight(Pane oGrid) {
@@ -24,7 +26,7 @@ public class ObsKnight implements ListChangeListener<Knight> {
     }
 
     public void animate() {
-        for (SoldierView s : knightSprite) {
+        for (MovingActorView s : knightSprite) {
             s.switchImage();
         }
     }
@@ -36,7 +38,7 @@ public class ObsKnight implements ListChangeListener<Knight> {
             List<Knight> retirer = (List<Knight>) change.getRemoved();
 
             for (Knight k : ajout) {
-                SoldierView s = new SoldierView(k);
+                MovingActorView s = new MovingActorView(k);
                 grid.getChildren().add(s.getPaneViewContainer());
                 knightSprite.add(s);
             }
@@ -46,7 +48,7 @@ public class ObsKnight implements ListChangeListener<Knight> {
         }
     }
 
-    public ArrayList<SoldierView> getKnightSprite() {
+    public ArrayList<MovingActorView> getKnightSprite() {
         return knightSprite;
     }
 
