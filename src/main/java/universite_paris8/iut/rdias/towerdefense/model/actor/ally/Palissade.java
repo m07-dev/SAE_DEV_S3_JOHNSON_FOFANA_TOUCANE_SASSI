@@ -34,10 +34,6 @@ public class Palissade extends StaticActor {
         );
     }
 
-    @Override
-    public void act() {
-    }
-
 
     @Override
     public boolean canBePlaced(int line, int col) {

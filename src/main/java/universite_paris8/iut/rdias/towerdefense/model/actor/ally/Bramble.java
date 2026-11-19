@@ -46,7 +46,7 @@ public class Bramble extends StaticActor {
     }
 
     @Override
-    public void takeDamage(Actor attacker, int amount) {
+    public void takeDamage(Actor attacker) {
         // Bramble ignore les dégâts
     }
 

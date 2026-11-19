@@ -24,7 +24,7 @@ public class FindTargetMultiple implements FindTargetStrategy {
     public Actor findTarget() {
         Actor closestTarget = null;
         double minSquaredDistance = Double.MAX_VALUE;
-        Actor tempActor = null;
+        Actor tempActor;
         for (FindTargetStrategy findTargetStrategy : findTargetStrategyList) {
              tempActor = findTargetStrategy.findTarget();
              if (tempActor != null) {

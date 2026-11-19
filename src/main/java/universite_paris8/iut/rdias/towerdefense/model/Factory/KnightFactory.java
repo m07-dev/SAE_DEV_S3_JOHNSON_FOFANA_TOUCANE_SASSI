@@ -22,35 +22,31 @@ public class KnightFactory implements ActorFactory {
     }
 
     public Actor create() {
-        if (base.getNbKnight() < base.getNbKnightMax()) {
-            ActorStats s = stat;
-            int[] closestPathBase = base.getClosestpath();
-            Knight knight = new Knight(env, env.getNextId(), s.hp(), s.hp(), s.dmg(), s.range(), closestPathBase[0], closestPathBase[1],
-                    base, s.cooldown(), s.speed(), base);
+        ActorStats s = stat;
+        int[] closestPathBase = base.getClosestpath();
+        Knight knight = new Knight(env, env.getNextId(), s.hp(), s.hp(), s.dmg(), s.range(), closestPathBase[0], closestPathBase[1],
+                base, s.cooldown(), s.speed(), base);
 
-            FindTargetMultiple find = new FindTargetMultiple(knight);
-            find.addFindTargetStrategy(new FindTargetFromList(knight, env.getEnemies()));
-            find.addFindTargetStrategy(() -> {
-                if (env.getEnemies().isEmpty()) {
-                    return base;
-                }
-                else {
-                    return null;
-                }
-            });
-            knight.setFindTargetStrategy(find);
-            knight.setAttackStrategy(new AttackMelee(knight));
+        FindTargetMultiple find = new FindTargetMultiple(knight);
+        find.addFindTargetStrategy(new FindTargetFromList(knight, env.getEnemies()));
+        find.addFindTargetStrategy(() -> {
+            if (env.getEnemies().isEmpty()) {
+                return base;
+            }
+            else {
+                return null;
+            }
+        });
+        knight.setFindTargetStrategy(find);
+        knight.setAttackStrategy(new AttackMelee(knight));
 
-            return knight;
-        }
-        return null;
+        return knight;
     }
 
     @Override
     public void spawn() {
         Knight knight = (Knight)create();
         if (knight != null) {
-            base.incrementNbKnight();
             env.addKnight(knight);
         }
     }

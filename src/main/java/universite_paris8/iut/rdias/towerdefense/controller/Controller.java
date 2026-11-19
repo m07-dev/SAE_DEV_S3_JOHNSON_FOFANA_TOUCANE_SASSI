@@ -148,9 +148,9 @@ public class Controller {
 
     private void bindProperties() {
         balanceLabel.textProperty().bind(env.getBalanceProperty().asString());
-        hpPlayer.textProperty().bind(env.getCastle().getHpPlayerProperty().asString());
+        hpPlayer.textProperty().bind(env.getCastle().getHpProperty().asString());
         hpBar.progressProperty().bind(
-                env.getCastle().getHpPlayerProperty().divide((double) env.getCastle().getMaxHp())
+                env.getCastle().getHpProperty().divide((double) env.getCastle().getMaxHp())
         );
         waveLabel.textProperty().bind(env.getWaveIndexProperty().asString());
 
@@ -195,7 +195,7 @@ public class Controller {
     }
 
     private void setupGameOver() {
-        env.getCastle().getHpPlayerProperty().addListener((obs, oldVal, newVal) -> {
+        env.getCastle().getHpProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.intValue() <= 0) {
                 gameLoop.stop();
                 showGameOver();

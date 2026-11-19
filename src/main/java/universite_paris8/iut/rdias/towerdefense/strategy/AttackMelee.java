@@ -16,16 +16,16 @@ public class AttackMelee implements AttackStrategy {
         this.lastAttackTime = 0;
     }
 
-    @Override
     public void attack() {
         if (attacker != null) {
             Actor target = attacker.getTarget();
-             if (target != null
+            if (target != null
                     && env.getCurrentTime()-lastAttackTime > attacker.getCooldown()
                     && isWithinRange(attacker, target, attacker.getRange())) {
-                 target.takeDamage(attacker, attacker.getDmg());
-                 lastAttackTime = env.getCurrentTime();
-             }
+                target.takeDamage(attacker);
+                lastAttackTime = env.getCurrentTime();
+            }
         }
+
     }
 }

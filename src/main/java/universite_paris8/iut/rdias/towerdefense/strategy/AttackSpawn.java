@@ -10,12 +10,12 @@ import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
 
 public class AttackSpawn implements AttackStrategy {
     private Environnement env;
-    private Barrack attacker;
+    private Actor attacker;
     private ActorFactory factory;
     private int lastAttackTime;
 
 
-    public AttackSpawn(Barrack attacker, ActorFactory factory) {
+    public AttackSpawn(Actor attacker, ActorFactory factory) {
         this.attacker = attacker;
         this.env = attacker.getEnvironnement();
         this.factory = factory;
@@ -25,12 +25,8 @@ public class AttackSpawn implements AttackStrategy {
     @Override
     public void attack() {
         if (env.getCurrentTime()-lastAttackTime > attacker.getCooldown()) {
-            Actor unit = factory.create();
-            if (unit != null) {
-                factory.spawn();
-                attacker.incrementNbKnight();
-                lastAttackTime = env.getCurrentTime();
-            }
+            factory.spawn();
+            lastAttackTime = env.getCurrentTime();
         }
     }
 }

@@ -34,8 +34,8 @@ public class Castle extends Actor {
         return hpPlayer.get();
     }
 
-    public void takeDamage(Actor attacker, int amount) {
-        hpPlayer.set(Math.max(0, hpPlayer.get() - amount));
+    public void takeDamage(Actor attacker) {
+        super.takeDamage(attacker);
         this.getEnvironnement().addDyingActor(attacker);
     }
 

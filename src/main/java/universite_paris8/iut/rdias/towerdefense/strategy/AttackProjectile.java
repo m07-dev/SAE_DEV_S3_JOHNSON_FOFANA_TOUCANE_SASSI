@@ -9,14 +9,14 @@ import static universite_paris8.iut.rdias.towerdefense.utils.ActorUtils.isWithin
 public class AttackProjectile implements AttackStrategy {
     private Environnement env;
     private Actor attacker;
-    private final ActorFactory projectileFactory;
     private int lastAttackTime;
+    private final ActorFactory projectileFactory;
 
     public AttackProjectile(Actor attacker, ActorFactory projectileFactory) {
         this.attacker = attacker;
         this.env = attacker.getEnvironnement();
-        this.projectileFactory = projectileFactory;
         this.lastAttackTime = 0;
+        this.projectileFactory = projectileFactory;
     }
 
     @Override

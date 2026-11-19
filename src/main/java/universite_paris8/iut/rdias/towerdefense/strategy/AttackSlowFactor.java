@@ -20,8 +20,7 @@ public class AttackSlowFactor implements AttackStrategy {
             Actor target = attacker.getTarget();
             if ((target instanceof MovingActor movingActor)
                     && isWithinRange(attacker, target, attacker.getRange())) {
-                movingActor.applySlow(attacker.getSlowFactor(),
-                        attacker.getSlowDuration());
+                movingActor.applySlow(attacker.getSlowFactor(), attacker.getSlowDuration());
             }
         }
 

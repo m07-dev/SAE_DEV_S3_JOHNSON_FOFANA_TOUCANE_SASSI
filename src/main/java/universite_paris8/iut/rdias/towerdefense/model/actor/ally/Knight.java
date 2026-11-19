@@ -34,6 +34,8 @@ public class Knight extends MovingActor {
                 speed
         );
         this.base = base;
+        if (this.base != null)
+            this.base.incrementNbKnight();
     }
 
     @Override

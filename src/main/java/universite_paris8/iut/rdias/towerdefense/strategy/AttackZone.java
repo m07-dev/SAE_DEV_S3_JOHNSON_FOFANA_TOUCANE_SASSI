@@ -20,7 +20,7 @@ public class AttackZone implements AttackStrategy{
     public void attack() {
         for (Actor a : targetableList) {
             if (a.isLiving() && isWithinRange(attacker, a, attacker.getRange())) {
-                a.takeDamage(attacker, attacker.getDmg());
+                a.takeDamage(attacker);
             }
         }
     }

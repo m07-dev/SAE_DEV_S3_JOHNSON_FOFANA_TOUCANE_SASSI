@@ -45,13 +45,15 @@ public abstract class Projectile extends Actor {
     }
 
     public void act() {
-        move();
         if (getTarget() == null || !getTarget().isLiving()) {
             die();
         }
         else if (isWithinRange(this, getTarget(), speed)) {
             getAttackStrategy().attack();
             die();
+        }
+        else {
+            move();
         }
     }
 

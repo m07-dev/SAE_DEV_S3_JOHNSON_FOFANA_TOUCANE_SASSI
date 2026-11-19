@@ -3,6 +3,7 @@ package universite_paris8.iut.rdias.towerdefense.model.Factory;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Actor;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Barrack;
+import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Bramble;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
 import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
 import universite_paris8.iut.rdias.towerdefense.model.actor.enemy.*;
@@ -55,7 +56,8 @@ public class VikingFactory {
                         castle, s.cooldown(), s.speed(), s.deathValue());
                 find = new FindTargetMultiple(viking);
                 find.addFindTargetStrategy(new FindTargetFromList(viking, env.getKnights()));
-                find.addFindTargetStrategy(new FindTargetFromList(viking, env.getTowers()));
+                find.addFindTargetStrategy(new FindTargetFromListWithCondition(viking, env.getTowers(),
+                        (Actor a) -> !(a instanceof Palissade) && !(a instanceof Bramble)));
             }
             case BERSERKER -> {
                 viking = new Berserker(env, id, s.hp(), s.hp(), s.dmg(), s.range(), lin, col,

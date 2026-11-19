@@ -6,8 +6,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import universite_paris8.iut.rdias.towerdefense.model.actor.Environnement.Environnement;
-import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Knight;
-import universite_paris8.iut.rdias.towerdefense.model.actor.ally.Palissade;
 import universite_paris8.iut.rdias.towerdefense.strategy.AttackStrategy;
 import universite_paris8.iut.rdias.towerdefense.strategy.FindTargetStrategy;
 
@@ -64,8 +62,8 @@ public abstract class Actor {
         this.hp.setValue(0);
         this.env.addDyingActor(this);
     }
-    public void takeDamage(Actor Attacker, int amount) {
-        this.hp.setValue(Math.max(0, this.hp.getValue() - amount));
+    public void takeDamage(Actor attacker) {
+        this.hp.setValue(Math.max(0, this.hp.getValue() - attacker.getDmg()));
         if (hp.getValue() <= 0) {
             this.die();
         }
